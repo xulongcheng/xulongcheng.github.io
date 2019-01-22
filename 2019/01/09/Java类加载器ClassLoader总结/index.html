@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>Java类加载器ClassLoader总结 | 龙城</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="JAVA类装载方式，有两种: 隐式装载， 程序在运行过程中当碰到通过new 等方式生成对象时，隐式调用类装载器加载对应的类到jvm中。  显式装载， 通过class.forname()等方法，显式加载需要的类  类加载的动态性体现:一个应用程序总是由n多个类组成，Java程序启动时，并不是一次把所有的类全部加载后再运行，它总是先把保证程序运行的基础类一次性加载到jvm中，其它类等到jvm用到的时候">
+<meta name="keywords" content="Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java类加载器ClassLoader总结">
+<meta property="og:url" content="https://xulongcheng.github.io/2019/01/09/Java类加载器ClassLoader总结/index.html">
+<meta property="og:site_name" content="龙城">
+<meta property="og:description" content="JAVA类装载方式，有两种: 隐式装载， 程序在运行过程中当碰到通过new 等方式生成对象时，隐式调用类装载器加载对应的类到jvm中。  显式装载， 通过class.forname()等方法，显式加载需要的类  类加载的动态性体现:一个应用程序总是由n多个类组成，Java程序启动时，并不是一次把所有的类全部加载后再运行，它总是先把保证程序运行的基础类一次性加载到jvm中，其它类等到jvm用到的时候">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="https://github.com/lucienhsu/lucienhsu.github.io/raw/master/img/post/java-classloader.jpg">
+<meta property="og:updated_time" content="2019-01-22T09:17:28.194Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java类加载器ClassLoader总结">
+<meta name="twitter:description" content="JAVA类装载方式，有两种: 隐式装载， 程序在运行过程中当碰到通过new 等方式生成对象时，隐式调用类装载器加载对应的类到jvm中。  显式装载， 通过class.forname()等方法，显式加载需要的类  类加载的动态性体现:一个应用程序总是由n多个类组成，Java程序启动时，并不是一次把所有的类全部加载后再运行，它总是先把保证程序运行的基础类一次性加载到jvm中，其它类等到jvm用到的时候">
+<meta name="twitter:image" content="https://github.com/lucienhsu/lucienhsu.github.io/raw/master/img/post/java-classloader.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="龙城" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">龙城</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Welcome</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://xulongcheng.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Java类加载器ClassLoader总结" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/01/09/Java类加载器ClassLoader总结/" class="article-date">
+  <time datetime="2019-01-08T16:00:00.000Z" itemprop="datePublished">2019-01-09</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/学习笔记/">学习笔记</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Java类加载器ClassLoader总结
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="JAVA类装载方式，有两种"><a href="#JAVA类装载方式，有两种" class="headerlink" title="JAVA类装载方式，有两种:"></a>JAVA类装载方式，有两种:</h1><ol>
+<li>隐式装载， 程序在运行过程中当碰到通过new 等方式生成对象时，隐式调用类装载器加载对应的类到jvm中。 </li>
+<li>显式装载， 通过class.forname()等方法，显式加载需要的类</li>
+</ol>
+<h1 id="类加载的动态性体现"><a href="#类加载的动态性体现" class="headerlink" title="类加载的动态性体现:"></a>类加载的动态性体现:</h1><p>一个应用程序总是由n多个类组成，Java程序启动时，并不是一次把所有的类全部加载后再运行，它总是先把保证程序运行的基础类一次性加载到jvm中，其它类等到jvm用到的时候再加载，这样的好处是节省了内存的开销，因为java最早就是为嵌入式系统而设计的，内存宝贵，这是一种可以理解的机制，而用到时再加载这也是java动态性的一种体现。</p>
+<h1 id="java类装载器"><a href="#java类装载器" class="headerlink" title="java类装载器"></a>java类装载器</h1><p>JDK 默认提供了如下几种ClassLoader</p>
+<ol>
+<li>Bootstrp loader<br>Bootstrp加载器是用C++语言写的，它是在Java虚拟机启动后初始化的，它主要负责加载<code>%JAVA_HOME%/jre/lib</code>,<code>-Xbootclasspath</code>参数指定的路径以及<code>%JAVA_HOME%/jre/classes</code>中的类。</li>
+<li>ExtClassLoader<br>Bootstrp loader加载ExtClassLoader,并且将ExtClassLoader的父加载器设置为<code>Bootstrp loader.ExtClassLoader</code>是用Java写的，具体来说就是<code>sun.misc.Launcher$ExtClassLoader</code>，ExtClassLoader主要加载<code>%JAVA_HOME%/jre/lib/ext</code>，此路径下的所有classes目录以及<code>java.ext.dirs</code>系统变量指定的路径中类库。</li>
+<li>AppClassLoader<br>Bootstrp loader加载完ExtClassLoader后，就会加载AppClassLoader,并且将AppClassLoader的父加载器指定为 ExtClassLoader。AppClassLoader也是用Java写成的，它的实现类是 <code>sun.misc.Launcher$AppClassLoader</code>，另外我们知道ClassLoader中有个<code>getSystemClassLoader</code>方法,此方法返回的正是<code>AppclassLoader.AppClassLoader</code>主要负责加载classpath所指定的位置的类或者是jar文档，它也是Java程序默认的类加载器。</li>
+</ol>
+<p>综上所述，它们之间的关系可以通过下图形象的描述：<br><img src="https://github.com/lucienhsu/lucienhsu.github.io/raw/master/img/post/java-classloader.jpg" alt="FAB法则"> </p>
+<blockquote>
+<p>为什么要有三个类加载器，一方面是分工，各自负责各自的区块，另一方面为了实现委托模型。</p>
+</blockquote>
+<h1 id="类加载器之间是如何协调工作的"><a href="#类加载器之间是如何协调工作的" class="headerlink" title="类加载器之间是如何协调工作的"></a>类加载器之间是如何协调工作的</h1><p>前面说了，java中有三个类加载器，问题就来了，碰到一个类需要加载时，它们之间是如何协调工作的，即java是如何区分一个类该由哪个类加载器来完成呢。 在这里java采用了<code>委托模型机制</code>，这个机制简单来讲，就是“<strong>类装载器有载入类的需求时，会先请示其Parent使用其搜索路径帮忙载入，如果Parent 找不到,那么才由自己依照自己的搜索路径搜索类</strong>”.</p>
+<p>下面举一个例子来说明，为了更好的理解，先弄清楚几行代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">Public <span class="class"><span class="keyword">class</span> <span class="title">Test</span></span>&#123;</span><br><span class="line">    <span class="function">Public <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] arg)</span></span>&#123;</span><br><span class="line">        <span class="comment">//获取Test类的类加载器</span></span><br><span class="line">        ClassLoader c  = Test.class.getClassLoader();  </span><br><span class="line">        System.out.println(c); </span><br><span class="line">        <span class="comment">//获取c这个类加载器的父类加载器</span></span><br><span class="line">        ClassLoader c1 = c.getParent();  </span><br><span class="line">        System.out.println(c1);</span><br><span class="line">        <span class="comment">//获取c1这个类加载器的父类加载器</span></span><br><span class="line">        ClassLoader c2 = c1.getParent();</span><br><span class="line">        System.out.println(c2);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 运行结果：</span></span><br><span class="line">……AppClassLoader……</span><br><span class="line">……ExtClassLoader……</span><br><span class="line">Null</span><br></pre></td></tr></table></figure>
+<p>可以看出Test是由AppClassLoader加载器加载的，AppClassLoader的Parent 加载器是 ExtClassLoader,但是ExtClassLoader的Parent为 null 是怎么回事呵，朋友们留意的话，前面有提到Bootstrap Loader是用C++语言写的，依java的观点来看，逻辑上并不存在Bootstrap Loader的类实体，所以在java程序代码里试图打印出其内容时，我们就会看到输出为null。</p>
+<h1 id="类装载器ClassLoader（一个抽象类）描述一下JVM加载class文件的原理机制"><a href="#类装载器ClassLoader（一个抽象类）描述一下JVM加载class文件的原理机制" class="headerlink" title="类装载器ClassLoader（一个抽象类）描述一下JVM加载class文件的原理机制"></a>类装载器ClassLoader（一个抽象类）描述一下JVM加载class文件的原理机制</h1><p>类装载器就是寻找类或接口字节码文件进行解析并构造JVM内部对象表示的组件，在java中类装载器把一个类装入JVM，经过以下步骤：</p>
+<ol>
+<li>装载：查找和导入Class文件 </li>
+<li>链接：其中解析步骤是可以选择的 <ul>
+<li>检查：检查载入的class文件数据的正确性 </li>
+<li>准备：给类的静态变量分配存储空间 </li>
+<li>解析：将符号引用转成直接引用 </li>
+</ul>
+</li>
+<li>初始化：对静态变量，静态代码块执行初始化工作</li>
+</ol>
+<p>类装载工作由ClassLoder和其子类负责。<br>JVM在运行时会产生三个ClassLoader：根装载器，ExtClassLoader(扩展类装载器)和AppClassLoader，其中根装载器不是ClassLoader的子类，由C++编写，因此在java中看不到他，负责装载JRE的核心类库，如JRE目录下的rt.jar,charsets.jar等。<br>ExtClassLoader是ClassLoder的子类，负责装载JRE扩展目录ext下的jar类包；<br>AppClassLoader负责装载classpath路径下的类包，这三个类装载器存在父子层级关系<em>**</em>，即根装载器是ExtClassLoader的父装载器，ExtClassLoader是AppClassLoader的父装载器。默认情况下使用AppClassLoader装载应用程序的类</p>
+<p>Java装载类使用“全盘负责委托机制”。<br>“全盘负责”是指当一个ClassLoder装载一个类时，除非显示的使用另外一个ClassLoder，该类所依赖及引用的类也由这个ClassLoder载入；<br>“委托机制”是指先委托父类装载器寻找目标类，只有在找不到的情况下才从自己的类路径中查找并装载目标类。<br>这一点是从安全方面考虑的，试想如果一个人写了一个恶意的基础类（如java.lang.String）并加载到JVM将会引起严重的后果，但有了全盘负责制，java.lang.String永远是由根装载器来装载，避免以上情况发生。<br>除了JVM默认的三个ClassLoder以外，第三方可以编写自己的类装载器，以实现一些特殊的需求。类文件被装载解析后，在JVM中都有一个对应的java.lang.Class对象，提供了类结构信息的描述。数组，枚举及基本数据类型，甚至void都拥有对应的Class对象。Class类没有public的构造方法，Class对象是在装载类时由JVM通过调用类装载器中的defineClass()方法自动构造的。</p>
+<h2 id="为什么要使用这种双亲委托模式呢？"><a href="#为什么要使用这种双亲委托模式呢？" class="headerlink" title="为什么要使用这种双亲委托模式呢？"></a>为什么要使用这种双亲委托模式呢？</h2><p>因为这样可以避免重复加载，当父亲已经加载了该类的时候，就没有必要子ClassLoader再加载一次。<br>考虑到安全因素，我们试想一下，如果不使用这种委托模式，那我们就可以随时使用自定义的String来动态替代java核心api中定义类型，这样会存在非常大的安全隐患，而双亲委托的方式，就可以避免这种情况，因为String已经在启动时被加载，所以用户自定义类是无法加载一个自定义的ClassLoader。</p>
+<blockquote>
+<p>思考：假如我们自己写了一个java.lang.String的类，我们是否可以替换调JDK本身的类？答案是否定的。<br>我们不能实现。为什么呢？我看很多网上解释是说双亲委托机制解决这个问题，其实不是非常的准确。因为双亲委托机制是可以打破的，你完全可以自己写一个classLoader来加载自己写的java.lang.String类，但是你会发现也不会加载成功，具体就是因为针对java.*开头的类，jvm的实现中已经保证了必须由bootstrp来加载。</p>
+</blockquote>
+<h1 id="定义自已的ClassLoader"><a href="#定义自已的ClassLoader" class="headerlink" title="定义自已的ClassLoader"></a>定义自已的ClassLoader</h1><p>既然JVM已经提供了默认的类加载器，为什么还要定义自已的类加载器呢？</p>
+<p>因为Java中提供的默认ClassLoader，只加载指定目录下的jar和class，如果我们想加载其它位置的类或jar时，比如：我要加载网络上的一个class文件，通过动态加载到内存之后，要调用这个类中的方法实现我的业务逻辑。在这样的情况下，默认的ClassLoader就不能满足我们的需求了，所以需要定义自己的ClassLoader。</p>
+<p>定义自已的类加载器分为两步：</p>
+<ol>
+<li>继承java.lang.ClassLoader</li>
+<li>重写父类的findClass方法</li>
+</ol>
+<p>读者可能在这里有疑问，父类有那么多方法，为什么偏偏只重写findClass方法？</p>
+<p>因为JDK已经在loadClass方法中帮我们实现了ClassLoader搜索类的算法，当在loadClass方法中搜索不到类时，loadClass方法就会调用findClass方法来搜索类，所以我们只需重写该方法即可。如没有特殊的要求，一般不建议重写loadClass搜索类的算法。</p>
+<h1 id="线程上下文类加载器"><a href="#线程上下文类加载器" class="headerlink" title="线程上下文类加载器"></a>线程上下文类加载器</h1><p>　　线程上下文类加载器（context class loader）是从 JDK 1.2 开始引入的。类 java.lang.Thread中的方法 getContextClassLoader()和 setContextClassLoader(ClassLoader cl)用来获取和设置线程的上下文类加载器。如果没有通过 setContextClassLoader(ClassLoader cl)方法进行设置的话，线程将继承其父线程的上下文类加载器。Java 应用运行的初始线程的上下文类加载器是系统类加载器。在线程中运行的代码可以通过此类加载器来加载类和资源。</p>
+<p>　　前面提到的类加载器的代理模式并不能解决 Java 应用开发中会遇到的类加载器的全部问题。Java 提供了很多服务提供者接口（Service Provider Interface，SPI），允许第三方为这些接口提供实现。常见的 SPI 有 JDBC、JCE、JNDI、JAXP 和 JBI 等。这些 SPI 的接口由 Java 核心库来提供，如 JAXP 的 SPI 接口定义包含在 javax.xml.parsers包中。这些 SPI 的实现代码很可能是作为 Java 应用所依赖的 jar 包被包含进来，可以通过类路径（CLASSPATH）来找到，如实现了 JAXP SPI 的 Apache Xerces所包含的 jar 包。SPI 接口中的代码经常需要加载具体的实现类。如 JAXP 中的 javax.xml.parsers.DocumentBuilderFactory类中的 newInstance()方法用来生成一个新的 DocumentBuilderFactory的实例。这里的实例的真正的类是继承自 javax.xml.parsers.DocumentBuilderFactory，由 SPI 的实现所提供的。如在 Apache Xerces 中，实现的类是 org.apache.xerces.jaxp.DocumentBuilderFactoryImpl。而问题在于，SPI 的接口是 Java 核心库的一部分，是由引导类加载器来加载的；SPI 实现的 Java 类一般是由系统类加载器来加载的。引导类加载器是无法找到 SPI 的实现类的，因为它只加载 Java 的核心库。它也不能代理给系统类加载器，因为它是系统类加载器的祖先类加载器。也就是说，类加载器的代理模式无法解决这个问题。<br>　　线程上下文类加载器正好解决了这个问题。如果不做任何的设置，Java 应用的线程的上下文类加载器默认就是系统上下文类加载器。在 SPI 接口的代码中使用线程上下文类加载器，就可以成功的加载到 SPI 实现的类。线程上下文类加载器在很多 SPI 的实现中都会用到。</p>
+<h1 id="类加载器与Web容器"><a href="#类加载器与Web容器" class="headerlink" title="类加载器与Web容器"></a>类加载器与Web容器</h1><p>　　对于运行在 Java EE容器中的 Web 应用来说，类加载器的实现方式与一般的 Java 应用有所不同。不同的 Web 容器的实现方式也会有所不同。以 Apache Tomcat 来说，每个 Web 应用都有一个对应的类加载器实例。该类加载器也使用代理模式，所不同的是它是首先尝试去加载某个类，如果找不到再代理给父类加载器。这与一般类加载器的顺序是相反的。这是 Java Servlet 规范中的推荐做法，其目的是使得 Web 应用自己的类的优先级高于 Web 容器提供的类。这种代理模式的一个例外是：Java 核心库的类是不在查找范围之内的。这也是为了保证 Java 核心库的类型安全。 </p>
+<p>绝大多数情况下，Web 应用的开发人员不需要考虑与类加载器相关的细节。下面给出几条简单的原则：</p>
+<ol>
+<li>每个 Web 应用自己的 Java 类文件和使用的库的 jar 包，分别放在 WEB-INF/classes和 WEB-INF/lib目录下面。</li>
+<li>多个应用共享的 Java 类文件和 jar 包，分别放在 Web 容器指定的由所有 Web 应用共享的目录下面。</li>
+<li>当出现找不到类的错误时，检查当前类的类加载器和当前线程的上下文类加载器是否正确。</li>
+</ol>
+<h1 id="类加载器与OSGi"><a href="#类加载器与OSGi" class="headerlink" title="类加载器与OSGi"></a>类加载器与OSGi</h1><p>OSGi是 Java 上的动态模块系统。它为开发人员提供了面向服务和基于组件的运行环境，并提供标准的方式用来管理软件的生命周期。OSGi 已经被实现和部署在很多产品上，在开源社区也得到了广泛的支持。Eclipse就是基于OSGi 技术来构建的。            </p>
+<p>OSGi 中的每个模块（bundle）都包含 Java 包和类。模块可以声明它所依赖的需要导入（import）的其它模块的 Java 包和类（通过 Import-Package），也可以声明导出（export）自己的包和类，供其它模块使用（通过 Export-Package）。也就是说需要能够隐藏和共享一个模块中的某些 Java 包和类。这是通过 OSGi 特有的类加载器机制来实现的。OSGi 中的每个模块都有对应的一个类加载器。它负责加载模块自己包含的 Java 包和类。当它需要加载 Java 核心库的类时（以 java开头的包和类），它会代理给父类加载器（通常是启动类加载器）来完成。当它需要加载所导入的 Java 类时，它会代理给导出此 Java 类的模块来完成加载。模块也可以显式的声明某些 Java 包和类，必须由父类加载器来加载。只需要设置系统属性<code>org.osgi.framework.bootdelegation</code>的值即可。  </p>
+<p>假设有两个模块 bundleA 和 bundleB，它们都有自己对应的类加载器 classLoaderA 和 classLoaderB。在 bundleA 中包含类<code>com.bundleA.Sample</code>，并且该类被声明为导出的，也就是说可以被其它模块所使用的。bundleB 声明了导入 bundleA 提供的类 com.bundleA.Sample，并包含一个类<code>com.bundleB.NewSample</code>继承自<code>com.bundleA.Sample</code>。在 bundleB 启动的时候，其类加载器 classLoaderB 需要加载类<code>com.bundleB.NewSample</code>，进而需要加载类 com.bundleA.Sample。由于 bundleB 声明了类<code>com.bundleA.Sample</code>是导入的，classLoaderB 把加载类<code>com.bundleA.Sample</code>的工作代理给导出该类的 bundleA 的类加载器 classLoaderA。classLoaderA 在其模块内部查找类<code>com.bundleA.Sample</code>并定义它，所得到的类 <code>com.bundleA.Sample</code>实例就可以被所有声明导入了此类的模块使用。对于以 java开头的类，都是由父类加载器来加载的。如果声明了系统属性 <code>org.osgi.framework.bootdelegation=com.example.core.*</code>，那么对于包 com.example.core中的类，都是由父类加载器来完成的。</p>
+<p>OSGi 模块的这种类加载器结构，使得一个类的不同版本可以共存在 Java 虚拟机中，带来了很大的灵活性。不过它的这种不同，也会给开发人员带来一些麻烦，尤其当模块需要使用第三方提供的库的时候。下面提供几条比较好的建议：</p>
+<ol>
+<li>如果一个类库只有一个模块使用，把该类库的 jar 包放在模块中，在 Bundle-ClassPath中指明即可。</li>
+<li>如果一个类库被多个模块共用，可以为这个类库单独的创建一个模块，把其它模块需要用到的 Java 包声明为导出的。其它模块声明导入这些类。</li>
+<li>如果类库提供了 SPI 接口，并且利用线程上下文类加载器来加载 SPI 实现的 Java 类，有可能会找不到 Java 类。如果出现了 NoClassDefFoundError异常，首先检查当前线程的上下文类加载器是否正确。通过 Thread.currentThread().getContextClassLoader()就可以得到该类加载器。该类加载器应该是该模块对应的类加载器。如果不是的话，可以首先通过 class.getClassLoader()来得到模块对应的类加载器，再通过 <code>Thread.currentThread().setContextClassLoader()</code>来设置当前线程的上下文类加载器。</li>
+</ol>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ol>
+<li><a href="http://blog.csdn.net/zhoudaxia/article/details/35897057" target="_blank" rel="noopener">http://blog.csdn.net/zhoudaxia/article/details/35897057</a></li>
+<li><a href="http://blog.jobbole.com/96145/" target="_blank" rel="noopener">http://blog.jobbole.com/96145/</a></li>
+<li><a href="http://my.oschina.net/aminqiao/blog/262601" target="_blank" rel="noopener">http://my.oschina.net/aminqiao/blog/262601</a></li>
+</ol>
+<blockquote>
+<p>转载：<a href="https://www.cnblogs.com/doit8791/p/5820037.html" target="_blank" rel="noopener">https://www.cnblogs.com/doit8791/p/5820037.html</a></p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://xulongcheng.github.io/2019/01/09/Java类加载器ClassLoader总结/" data-id="cjr7jxike002gers6b36efyey" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/01/15/hello-world/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Hello World
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/11/13/kettle笔记/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">kettle笔记</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Others/">Others</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/书单/">书单</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/备忘/">备忘</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/学习笔记/">学习笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/生活经验/">生活经验</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/计划/">计划</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/读书笔记/">读书笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/转载/">转载</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Coding/">Coding</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FindBugs/">FindBugs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GitHub/">GitHub</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis/">Mybatis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Others/">Others</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Reading/">Reading</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Reprinted/">Reprinted</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kettle/">kettle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/保险-重疾-轻疾-人寿/">保险/重疾/轻疾/人寿</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/信条/">信条</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/指令/">指令</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/时间清单/">时间清单</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/格言/">格言</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/牛客网刷题/">牛客网刷题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/程序员/">程序员</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/职业规划/">职业规划</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Coding/" style="font-size: 10px;">Coding</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/FindBugs/" style="font-size: 10px;">FindBugs</a> <a href="/tags/GitHub/" style="font-size: 10px;">GitHub</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Mybatis/" style="font-size: 10px;">Mybatis</a> <a href="/tags/Others/" style="font-size: 10px;">Others</a> <a href="/tags/Reading/" style="font-size: 15px;">Reading</a> <a href="/tags/Reprinted/" style="font-size: 10px;">Reprinted</a> <a href="/tags/kettle/" style="font-size: 10px;">kettle</a> <a href="/tags/保险-重疾-轻疾-人寿/" style="font-size: 10px;">保险/重疾/轻疾/人寿</a> <a href="/tags/信条/" style="font-size: 10px;">信条</a> <a href="/tags/指令/" style="font-size: 10px;">指令</a> <a href="/tags/时间清单/" style="font-size: 10px;">时间清单</a> <a href="/tags/格言/" style="font-size: 10px;">格言</a> <a href="/tags/牛客网刷题/" style="font-size: 10px;">牛客网刷题</a> <a href="/tags/程序员/" style="font-size: 10px;">程序员</a> <a href="/tags/职业规划/" style="font-size: 10px;">职业规划</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/01/22/2018-9-11-家庭保险方案/">家庭保险方案原则</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/22/2018-9-13-FindBugs分析记录/">FindBugs分析记录</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/22/2018-9-14-读书笔记之《HeadFirst设计模式》/">读书笔记之《HeadFirst设计模式》</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/22/2018-9-20-GitHub项目收藏/">GitHub项目收藏</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/22/2018-9-20-ibatis支持JdbcType类型/">ibatis支持JdbcType类型</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Lucien<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

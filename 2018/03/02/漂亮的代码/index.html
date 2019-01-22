@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>漂亮的代码，精妙的实现！ | 龙城</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="禁止转载  前言 主要是为了备份日常工作或学习过程中，觉得有所感触的代码实现过程，便于后续重复使用。  正文PLSQL游标锁表、循环更新123456CURSOR c2 IS     SELECT aac002 FROM IEA4 WHERE CIE578 = PI_CIE578 FOR UPDATE;  ...FOR v2 IN c2 LOOP UPDATE IEA4 SET AAC002 =">
+<meta name="keywords" content="Coding">
+<meta property="og:type" content="article">
+<meta property="og:title" content="漂亮的代码，精妙的实现！">
+<meta property="og:url" content="https://xulongcheng.github.io/2018/03/02/漂亮的代码/index.html">
+<meta property="og:site_name" content="龙城">
+<meta property="og:description" content="禁止转载  前言 主要是为了备份日常工作或学习过程中，觉得有所感触的代码实现过程，便于后续重复使用。  正文PLSQL游标锁表、循环更新123456CURSOR c2 IS     SELECT aac002 FROM IEA4 WHERE CIE578 = PI_CIE578 FOR UPDATE;  ...FOR v2 IN c2 LOOP UPDATE IEA4 SET AAC002 =">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-01-22T09:15:20.514Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="漂亮的代码，精妙的实现！">
+<meta name="twitter:description" content="禁止转载  前言 主要是为了备份日常工作或学习过程中，觉得有所感触的代码实现过程，便于后续重复使用。  正文PLSQL游标锁表、循环更新123456CURSOR c2 IS     SELECT aac002 FROM IEA4 WHERE CIE578 = PI_CIE578 FOR UPDATE;  ...FOR v2 IN c2 LOOP UPDATE IEA4 SET AAC002 =">
+  
+    <link rel="alternate" href="/atom.xml" title="龙城" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">龙城</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Welcome</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://xulongcheng.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-漂亮的代码" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/03/02/漂亮的代码/" class="article-date">
+  <time datetime="2018-03-01T16:00:00.000Z" itemprop="datePublished">2018-03-02</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/备忘/">备忘</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      漂亮的代码，精妙的实现！
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>禁止转载</p>
+</blockquote>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><blockquote>
+<p>主要是为了备份日常工作或学习过程中，觉得有所感触的代码实现过程，便于后续重复使用。</p>
+</blockquote>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="PLSQL"><a href="#PLSQL" class="headerlink" title="PLSQL"></a><code>PLSQL</code></h2><h3 id="游标锁表、循环更新"><a href="#游标锁表、循环更新" class="headerlink" title="游标锁表、循环更新"></a>游标锁表、循环更新</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CURSOR c2 IS  </span><br><span class="line">   <span class="keyword">SELECT</span> aac002 <span class="keyword">FROM</span> IEA4 <span class="keyword">WHERE</span> CIE578 = PI_CIE578 <span class="keyword">FOR</span> <span class="keyword">UPDATE</span>;  </span><br><span class="line">...</span><br><span class="line">FOR v2 IN c2 LOOP</span><br><span class="line"> <span class="keyword">UPDATE</span> IEA4 <span class="keyword">SET</span> AAC002 = nvl(pkg_fun.f_sfzhm15to18(aac002), aac002) <span class="keyword">WHERE</span> <span class="keyword">CURRENT</span> <span class="keyword">OF</span> c2;</span><br><span class="line"><span class="keyword">END</span> <span class="keyword">LOOP</span>;</span><br></pre></td></tr></table></figure>
+<h2 id="MYSQL"><a href="#MYSQL" class="headerlink" title="MYSQL"></a><code>MYSQL</code></h2><h3 id="查看编码格式"><a href="#查看编码格式" class="headerlink" title="查看编码格式"></a>查看编码格式</h3><ul>
+<li><p>查看数据库编码格式</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">show</span> <span class="keyword">variables</span> <span class="keyword">like</span> <span class="string">'character_set_database'</span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>查看数据表的编码格式</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">show</span> <span class="keyword">create</span> <span class="keyword">table</span> &lt;表名&gt;;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="JAVA"><a href="#JAVA" class="headerlink" title="JAVA"></a><code>JAVA</code></h2><h3 id="同步-amp-异步httpClient请求"><a href="#同步-amp-异步httpClient请求" class="headerlink" title="同步&amp;异步httpClient请求"></a>同步&amp;异步<code>httpClient</code>请求</h3><h4 id="实现"><a href="#实现" class="headerlink" title="- 实现"></a>- 实现</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.http.HttpEntity;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.HttpResponse;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.HttpStatus;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.NameValuePair;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.client.HttpClient;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.client.entity.UrlEncodedFormEntity;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.client.methods.CloseableHttpResponse;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.client.methods.HttpGet;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.client.methods.HttpPost;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.concurrent.FutureCallback;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.entity.StringEntity;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.impl.client.CloseableHttpClient;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.impl.client.DefaultHttpClient;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.impl.client.HttpClients;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.impl.nio.client.CloseableHttpAsyncClient;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.impl.nio.client.HttpAsyncClients;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.message.BasicNameValuePair;</span><br><span class="line"><span class="keyword">import</span> org.apache.http.util.EntityUtils;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.UnsupportedEncodingException;</span><br><span class="line"><span class="keyword">import</span> java.nio.charset.Charset;</span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HttpClientUtil</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 发送POST   支持http、https</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> url      post地址</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> paramMap 要传递的参数封装成Map</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">sendPost</span><span class="params">(String url, Map&lt;String, String&gt; paramMap)</span> </span>&#123;</span><br><span class="line">        String returnmsg = <span class="string">""</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//封装参数</span></span><br><span class="line">            List&lt;NameValuePair&gt; parameters = <span class="keyword">new</span> ArrayList&lt;NameValuePair&gt;();</span><br><span class="line">            <span class="keyword">if</span> (paramMap != <span class="keyword">null</span> &amp;&amp; paramMap.keySet() != <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="keyword">for</span> (String key : paramMap.keySet()) &#123;</span><br><span class="line">                    parameters.add(<span class="keyword">new</span> BasicNameValuePair(key, paramMap.get(key)));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//创建UrlEncodedFormEntity对象</span></span><br><span class="line">            UrlEncodedFormEntity formEntiry = <span class="keyword">new</span> UrlEncodedFormEntity(parameters, <span class="string">"UTF-8"</span>);</span><br><span class="line">            <span class="keyword">if</span> (url.startsWith(<span class="string">"https"</span>)) &#123;</span><br><span class="line">                <span class="comment">//returnmsg=sendPostHttps(url,formEntiry);</span></span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                returnmsg = sendPostHttp(url, formEntiry);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> returnmsg;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//发送http请求</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">sendPostHttp</span><span class="params">(String url, UrlEncodedFormEntity formEntiry)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 发送请求</span></span><br><span class="line">        HttpClient client = <span class="keyword">new</span> DefaultHttpClient();</span><br><span class="line">        String returnmsg = <span class="string">"fail"</span>; <span class="comment">//失败</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//实例化HTTP POST方法</span></span><br><span class="line">            HttpPost postmethod = <span class="keyword">new</span> HttpPost(url);</span><br><span class="line">            postmethod.setEntity(formEntiry);</span><br><span class="line"></span><br><span class="line">            <span class="comment">//执行请求</span></span><br><span class="line">            HttpResponse reponse = client.execute(postmethod);</span><br><span class="line">            <span class="comment">//回去返回实体</span></span><br><span class="line">            HttpEntity entity = reponse.getEntity();</span><br><span class="line">            returnmsg = EntityUtils.toString(entity, <span class="string">"UTF-8"</span>);</span><br><span class="line">            <span class="comment">//System.out.println("POST返回数据:"+returnmsg);</span></span><br><span class="line">            <span class="comment">//若返回消息有中文要进行一下解码   服务器要加码URLEncoder.encode("服务器返回中文", "UTF-8")</span></span><br><span class="line">            <span class="comment">//System.out.println("POST返回数据--:"+URLDecoder.decode(returnmsg,"utf-8"));</span></span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            returnmsg = <span class="string">"fail"</span>;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="comment">//关闭连接,释放资源</span></span><br><span class="line">            client.getConnectionManager().shutdown();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> returnmsg;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * application/json</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> url</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> params</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">sendPostHttpJson</span><span class="params">(String url, String params)</span> </span>&#123;</span><br><span class="line">        HttpClient httpClient = <span class="keyword">null</span>;</span><br><span class="line">        HttpPost postMethod = <span class="keyword">null</span>;</span><br><span class="line">        HttpResponse response = <span class="keyword">null</span>;</span><br><span class="line">        String returnmsg = <span class="string">"fail"</span>; <span class="comment">//失败</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            httpClient = HttpClients.createDefault();</span><br><span class="line">            postMethod = <span class="keyword">new</span> HttpPost(url);<span class="comment">//传入URL地址</span></span><br><span class="line">            postMethod.addHeader(<span class="string">"Content-type"</span>, <span class="string">"application/json; charset=utf-8"</span>);</span><br><span class="line">            postMethod.setEntity(<span class="keyword">new</span> StringEntity(params, Charset.forName(<span class="string">"UTF-8"</span>)));</span><br><span class="line">            response = httpClient.execute(postMethod);<span class="comment">//获取响应</span></span><br><span class="line">            <span class="keyword">int</span> statusCode = response.getStatusLine().getStatusCode();</span><br><span class="line">            HttpEntity httpEntity = response.getEntity();</span><br><span class="line">            String reponseContent = EntityUtils.toString(httpEntity);</span><br><span class="line">            EntityUtils.consume(httpEntity);<span class="comment">//释放资源</span></span><br><span class="line">            <span class="keyword">if</span> (statusCode == HttpStatus.SC_OK) &#123;</span><br><span class="line">                returnmsg = reponseContent;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> returnmsg;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 发送GET请求</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> url</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">doGet</span><span class="params">(String url)</span> </span>&#123;</span><br><span class="line">        String reqUrl = url;</span><br><span class="line">        CloseableHttpResponse response = <span class="keyword">null</span>;</span><br><span class="line">        CloseableHttpClient client = <span class="keyword">null</span>;</span><br><span class="line">        HttpGet httpGet = <span class="keyword">new</span> HttpGet(reqUrl);</span><br><span class="line">        String result = <span class="string">"fail"</span>; <span class="comment">//失败</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            client = HttpClients.createDefault();</span><br><span class="line">            response = client.execute(httpGet);</span><br><span class="line">            <span class="keyword">int</span> statusCode = response.getStatusLine().getStatusCode();</span><br><span class="line">            HttpEntity httpEntity = response.getEntity();</span><br><span class="line">            String reponseContent = EntityUtils.toString(httpEntity);</span><br><span class="line">            EntityUtils.consume(httpEntity);<span class="comment">//释放资源</span></span><br><span class="line">            <span class="keyword">if</span> (statusCode == HttpStatus.SC_OK) &#123;</span><br><span class="line">                result = reponseContent;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 发送异步POST请求</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> url      post地址</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> paramMap 要传递的参数封装成Map</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">sendAsyncPost</span><span class="params">(String url, Map&lt;String, String&gt; paramMap, FutureCallback callback)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//封装参数</span></span><br><span class="line">        List&lt;NameValuePair&gt; parameters = <span class="keyword">new</span> ArrayList&lt;NameValuePair&gt;();</span><br><span class="line">        <span class="keyword">if</span> (paramMap != <span class="keyword">null</span> &amp;&amp; paramMap.keySet() != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">for</span> (String key : paramMap.keySet()) &#123;</span><br><span class="line">                parameters.add(<span class="keyword">new</span> BasicNameValuePair(key, paramMap.get(key)));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        CloseableHttpAsyncClient httpAsyncClient = HttpAsyncClients.createDefault();</span><br><span class="line">        HttpPost httpPost = <span class="keyword">new</span> HttpPost(url);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            UrlEncodedFormEntity formEntiry = <span class="keyword">new</span> UrlEncodedFormEntity(parameters, <span class="string">"UTF-8"</span>);</span><br><span class="line">            httpPost.setEntity(formEntiry);</span><br><span class="line">            <span class="comment">//start</span></span><br><span class="line">            httpAsyncClient.start();</span><br><span class="line">            <span class="comment">//异步请求</span></span><br><span class="line">            httpAsyncClient.execute(httpPost, callback);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (UnsupportedEncodingException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*try &#123;</span></span><br><span class="line"><span class="comment">            httpAsyncClient.close();</span></span><br><span class="line"><span class="comment">        &#125; catch (IOException e) &#123;</span></span><br><span class="line"><span class="comment">            e.printStackTrace();</span></span><br><span class="line"><span class="comment">        &#125;*/</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 发送异步GET请求</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> url post地址</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">doAsyncGet</span><span class="params">(String url, FutureCallback callback)</span> </span>&#123;</span><br><span class="line">        CloseableHttpAsyncClient httpAsyncClient = HttpAsyncClients.createDefault();</span><br><span class="line">        HttpGet httpGet = <span class="keyword">new</span> HttpGet(url);</span><br><span class="line">        <span class="comment">//start</span></span><br><span class="line">        httpAsyncClient.start();</span><br><span class="line">        <span class="comment">//异步请求</span></span><br><span class="line">        httpAsyncClient.execute(httpGet, callback);</span><br><span class="line"></span><br><span class="line">        <span class="comment">/*try &#123;</span></span><br><span class="line"><span class="comment">            httpAsyncClient.close();</span></span><br><span class="line"><span class="comment">        &#125; catch (IOException e) &#123;</span></span><br><span class="line"><span class="comment">            e.printStackTrace();</span></span><br><span class="line"><span class="comment">        &#125;*/</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="调用示例"><a href="#调用示例" class="headerlink" title="- 调用示例"></a>- 调用示例</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 调用示例</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line">Map&lt;String, String&gt; reqmap = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">reqmap.put(<span class="string">"basicPropertits"</span>, jobPropertyJson.toString());</span><br><span class="line">reqmap.put(<span class="string">"collectPropertits"</span>, jobConfigJson.toString());</span><br><span class="line">reqmap.put(<span class="string">"dataStore"</span>, jobStoreJson.toString());</span><br><span class="line">reqmap.put(<span class="string">"templatetList"</span>, jobProcJson.toString());</span><br><span class="line"></span><br><span class="line">HttpClientUtil.sendAsyncPost(clctEngineMethodCollectTemplateUrl, reqmap, <span class="keyword">new</span> launchServiceCallBack(id));</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * http异步请求回调处理</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">private</span> <span class="class"><span class="keyword">class</span> <span class="title">launchServiceCallBack</span> <span class="keyword">implements</span> <span class="title">FutureCallback</span>&lt;<span class="title">HttpResponse</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> jobId = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    launchServiceCallBack(<span class="keyword">int</span> _iJobid) &#123;</span><br><span class="line">        <span class="keyword">this</span>.jobId = _iJobid;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 请求完成后调用该函数</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">completed</span><span class="params">(HttpResponse httpResponse)</span> </span>&#123;</span><br><span class="line">        HttpEntity entity = httpResponse.getEntity();</span><br><span class="line">        String rtnMsg = <span class="string">"&#123;\"code\":\"fail\"&#125;"</span>;</span><br><span class="line">        String code = <span class="string">"fail"</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            rtnMsg = EntityUtils.toString(entity, <span class="string">"UTF-8"</span>);</span><br><span class="line">            Map&lt;String, String&gt; reqmap = (Map) JSONObject.fromObject(rtnMsg);</span><br><span class="line">            code = reqmap.get(<span class="string">"code"</span>).toString();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (code.equals(String.valueOf(HttpStatus.SC_OK))) &#123;</span><br><span class="line">                JobProperty load = jobPropertyService.load(<span class="keyword">this</span>.jobId);</span><br><span class="line">                load.setReleaseStatus(CollectionConstant.WHETHER_YES);</span><br><span class="line">                load.setReleaseTime(<span class="keyword">new</span> Date());</span><br><span class="line">                jobPropertyService.update(load);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 请求失败后调用该函数</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">failed</span><span class="params">(Exception e)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"failed"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 请求取消后调用该函数</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cancelled</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"cancelled"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="注意事项"><a href="#注意事项" class="headerlink" title="- 注意事项"></a>- 注意事项</h4><ul>
+<li>调用完成时，需及时关闭回收<code>httpAsyncClient</code></li>
+</ul>
+<hr>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://xulongcheng.github.io/2018/03/02/漂亮的代码/" data-id="cjr7jxikd002fers6pcgwgw4v" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Coding/">Coding</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2018/10/25/时间清单/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          时间清单:立了FLAG就要去做
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/12/07/牛客网之刷题系列/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">牛客网之刷题系列</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Others/">Others</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/书单/">书单</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/备忘/">备忘</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/学习笔记/">学习笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/生活经验/">生活经验</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/计划/">计划</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/读书笔记/">读书笔记</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/转载/">转载</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Coding/">Coding</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Docker/">Docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FindBugs/">FindBugs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GitHub/">GitHub</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Java/">Java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis/">Mybatis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Others/">Others</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Reading/">Reading</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Reprinted/">Reprinted</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/kettle/">kettle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/保险-重疾-轻疾-人寿/">保险/重疾/轻疾/人寿</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/信条/">信条</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/指令/">指令</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/时间清单/">时间清单</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/格言/">格言</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/牛客网刷题/">牛客网刷题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/程序员/">程序员</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/职业规划/">职业规划</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Coding/" style="font-size: 10px;">Coding</a> <a href="/tags/Docker/" style="font-size: 10px;">Docker</a> <a href="/tags/FindBugs/" style="font-size: 10px;">FindBugs</a> <a href="/tags/GitHub/" style="font-size: 10px;">GitHub</a> <a href="/tags/Java/" style="font-size: 20px;">Java</a> <a href="/tags/Mybatis/" style="font-size: 10px;">Mybatis</a> <a href="/tags/Others/" style="font-size: 10px;">Others</a> <a href="/tags/Reading/" style="font-size: 15px;">Reading</a> <a href="/tags/Reprinted/" style="font-size: 10px;">Reprinted</a> <a href="/tags/kettle/" style="font-size: 10px;">kettle</a> <a href="/tags/保险-重疾-轻疾-人寿/" style="font-size: 10px;">保险/重疾/轻疾/人寿</a> <a href="/tags/信条/" style="font-size: 10px;">信条</a> <a href="/tags/指令/" style="font-size: 10px;">指令</a> <a href="/tags/时间清单/" style="font-size: 10px;">时间清单</a> <a href="/tags/格言/" style="font-size: 10px;">格言</a> <a href="/tags/牛客网刷题/" style="font-size: 10px;">牛客网刷题</a> <a href="/tags/程序员/" style="font-size: 10px;">程序员</a> <a href="/tags/职业规划/" style="font-size: 10px;">职业规划</a> <a href="/tags/设计模式/" style="font-size: 10px;">设计模式</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/10/">October 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/01/22/2018-9-11-家庭保险方案/">家庭保险方案原则</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/22/2018-9-13-FindBugs分析记录/">FindBugs分析记录</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/22/2018-9-14-读书笔记之《HeadFirst设计模式》/">读书笔记之《HeadFirst设计模式》</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/22/2018-9-20-GitHub项目收藏/">GitHub项目收藏</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/22/2018-9-20-ibatis支持JdbcType类型/">ibatis支持JdbcType类型</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 Lucien<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

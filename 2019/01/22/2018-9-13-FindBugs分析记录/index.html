@@ -5,20 +5,22 @@
   
 
   
-  <title>Hello World | 龙城</title>
+  <title>FindBugs分析记录 | 龙城</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
-<meta name="keywords" content="Others">
+  <meta name="description" content="前言FindBugs解决方案。 参考 官网手册 用FindBugs分析代码漏洞  正文EI: May expose internal representation by returning reference to mutable object 官方描述   Returning a reference to a mutable object value stored in one of the o">
+<meta name="keywords" content="FindBugs,Java">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="https://xulongcheng.github.io/2019/01/15/hello-world/index.html">
+<meta property="og:title" content="FindBugs分析记录">
+<meta property="og:url" content="https://xulongcheng.github.io/2019/01/22/2018-9-13-FindBugs分析记录/index.html">
 <meta property="og:site_name" content="龙城">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta property="og:description" content="前言FindBugs解决方案。 参考 官网手册 用FindBugs分析代码漏洞  正文EI: May expose internal representation by returning reference to mutable object 官方描述   Returning a reference to a mutable object value stored in one of the o">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-01-15T10:09:33.557Z">
+<meta property="og:image" content="https://github.com/lucienhsu/lucienhsu.github.io/raw/master/img/post/解决方案.png">
+<meta property="og:updated_time" content="2019-01-22T09:15:42.986Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hello World">
-<meta name="twitter:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta name="twitter:title" content="FindBugs分析记录">
+<meta name="twitter:description" content="前言FindBugs解决方案。 参考 官网手册 用FindBugs分析代码漏洞  正文EI: May expose internal representation by returning reference to mutable object 官方描述   Returning a reference to a mutable object value stored in one of the o">
+<meta name="twitter:image" content="https://github.com/lucienhsu/lucienhsu.github.io/raw/master/img/post/解决方案.png">
   
     <link rel="alternate" href="/atom.xml" title="龙城" type="application/atom+xml">
   
@@ -69,14 +71,14 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-hello-world" class="article article-type-post" itemscope="" itemprop="blogPost">
+        <section id="main"><article id="post-2018-9-13-FindBugs分析记录" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2019/01/15/hello-world/" class="article-date">
-  <time datetime="2019-01-14T16:00:00.000Z" itemprop="datePublished">2019-01-15</time>
+    <a href="/2019/01/22/2018-9-13-FindBugs分析记录/" class="article-date">
+  <time datetime="2019-01-22T08:47:02.962Z" itemprop="datePublished">2019-01-22</time>
 </a>
     
   <div class="article-category">
-    <a class="article-category-link" href="/categories/Others/">Others</a>
+    <a class="article-category-link" href="/categories/学习笔记/">学习笔记</a>
   </div>
 
   </div>
@@ -87,7 +89,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Hello World
+      FindBugs分析记录
     </h1>
   
 
@@ -95,23 +97,43 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>FindBugs解决方案。</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ol>
+<li><a href="http://findbugs.sourceforge.net/bugDescriptions.html" target="_blank" rel="noopener">官网手册</a></li>
+<li><a href="https://www.cnblogs.com/hyddd/tag/hyddd%E7%9A%84FindBugs%E5%88%86%E6%9E%90%E8%AE%B0%E5%BD%95/default.html?page=1" target="_blank" rel="noopener">用FindBugs分析代码漏洞</a></li>
+</ol>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="EI-May-expose-internal-representation-by-returning-reference-to-mutable-object"><a href="#EI-May-expose-internal-representation-by-returning-reference-to-mutable-object" class="headerlink" title="EI: May expose internal representation by returning reference to mutable object"></a>EI: May expose internal representation by returning reference to mutable object</h2><ul>
+<li>官方描述  <blockquote>
+<p>Returning a reference to a mutable object value stored in one of the object’s fields exposes the internal representation of the object.  If instances are accessed by untrusted code, and unchecked changes to the mutable object would compromise security or other important properties, you will need to do something different. Returning a new copy of the object is better approach in many situations.</p>
+</blockquote>
+</li>
+<li><a href="https://stackoverflow.com/questions/8951107/malicious-code-vulnerability-may-expose-internal-representation-by-returning-r" target="_blank" rel="noopener">解决方案</a></li>
+</ul>
+<h2 id="EI2-May-expose-internal-representation-by-incorporating-reference-to-mutable-object"><a href="#EI2-May-expose-internal-representation-by-incorporating-reference-to-mutable-object" class="headerlink" title="EI2: May expose internal representation by incorporating reference to mutable object"></a>EI2: May expose internal representation by incorporating reference to mutable object</h2><ul>
+<li>官方描述  <blockquote>
+<p>This code stores a reference to an externally mutable object into the internal representation of the object.  If instances are accessed by untrusted code, and unchecked changes to the mutable object would compromise security or other important properties, you will need to do something different. Storing a copy of the object is better approach in many situations.</p>
+</blockquote>
+</li>
+<li><a href="https://www.cnblogs.com/hyddd/articles/1391118.html" target="_blank" rel="noopener">解决方案</a><blockquote>
+<p><img src="https://github.com/lucienhsu/lucienhsu.github.io/raw/master/img/post/解决方案.png" alt="解决方案"></p>
+</blockquote>
+</li>
+</ul>
+<h2 id="Field-is-a-mutable-collection"><a href="#Field-is-a-mutable-collection" class="headerlink" title="Field is a mutable collection"></a>Field is a mutable collection</h2><ul>
+<li>官方描述  <blockquote>
+<p>A mutable collection instance is assigned to a final static field, thus can be changed by malicious code or by accident from another package. Consider wrapping this field into Collections.unmodifiableSet/List/Map/etc. to avoid this vulnerability.</p>
+</blockquote>
+</li>
+<li><a href="https://blog.csdn.net/ai_xiangjuan/article/details/78248694" target="_blank" rel="noopener">解决方案</a>       <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.Collections;</span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Map&lt;String, Object&gt; ENGIN_DATATYPE;</span><br><span class="line"><span class="keyword">static</span> &#123;</span><br><span class="line">    Map&lt;String, Object&gt; aMap = <span class="keyword">new</span> HashMap();</span><br><span class="line">    aMap.put(<span class="string">"Number"</span>, <span class="string">"NUMBER,FLOAT,DOUBLE,DECIMAL,BINARY_FLOAT,BINARY_DOUBLE"</span>);</span><br><span class="line">    aMap.put(<span class="string">"String"</span>, <span class="string">"STRING,VARCHAR,CHAR,NCHAR,VARCHAR2,NVARCHAR2"</span>);</span><br><span class="line">    aMap.put(<span class="string">"Date"</span>, <span class="string">"DATE"</span>);</span><br><span class="line">    aMap.put(<span class="string">"Boolean"</span>, <span class="string">"BOOLEAN"</span>);</span><br><span class="line">    aMap.put(<span class="string">"Integer"</span>, <span class="string">"INTEGER,TINYINT,SMALLINT,MEDIUMINT,INT"</span>);</span><br><span class="line">    aMap.put(<span class="string">"BigNumber"</span>, <span class="string">"BIGNUMBER,BIGINT"</span>);</span><br><span class="line">    aMap.put(<span class="string">"Binary"</span>, <span class="string">"BINARY"</span>);</span><br><span class="line">    aMap.put(<span class="string">"Timestamp"</span>, <span class="string">"TIMESTAMP,DATETIME"</span>);</span><br><span class="line">    aMap.put(<span class="string">"Internet Address"</span>, <span class="string">"INTERNET ADDRESS"</span>);</span><br><span class="line">    ENGIN_DATATYPE = Collections.unmodifiableMap(aMap); <span class="comment">// 创建不可变集合</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://xulongcheng.github.io/2019/01/15/hello-world/" data-id="cjr7jxijy0018ers6baazlh7m" class="article-share-link">Share</a>
+      <a data-url="https://xulongcheng.github.io/2019/01/22/2018-9-13-FindBugs分析记录/" data-id="cjr7jxijb000aers6ygeqwk6p" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Others/">Others</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FindBugs/">FindBugs</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Java/">Java</a></li></ul>
 
     </footer>
   </div>
@@ -119,19 +141,19 @@
     
 <nav id="article-nav">
   
-    <a href="/2019/01/22/2018-9-7-各操作系统常用指令/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2019/01/22/2018-9-11-家庭保险方案/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          各操作系统常用指令
+          家庭保险方案原则
         
       </div>
     </a>
   
   
-    <a href="/2019/01/09/Java类加载器ClassLoader总结/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2019/01/22/2018-9-14-读书笔记之《HeadFirst设计模式》/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Java类加载器ClassLoader总结</div>
+      <div class="article-nav-title">读书笔记之《HeadFirst设计模式》</div>
     </a>
   
 </nav>
