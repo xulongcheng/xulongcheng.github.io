@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title><![CDATA[各操作系统常用指令]]></title>
+    <url>%2F2019%2F01%2F22%2F2018-09-7-%E5%90%84%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4%2F</url>
+    <content type="text"><![CDATA[禁止转载 前言常用指令备忘。 正文其他ping和telnet区别 LINUXlinux下实时查看tomcat运行日志 目录切换到cd usr/local/tomcat5/logs tail -f catalina.out 这样运行时就可以实时查看运行日志了 Ctrl+c 是退出tail命令 WINDOWS获取IP地址 ipconfig -allCMD判断端口是否被占用 netstat -aon|findstr &quot;8080&quot;]]></content>
+      <categories>
+        <category>备忘</category>
+      </categories>
+      <tags>
+        <tag>指令</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Hello World]]></title>
+    <url>%2F2019%2F01%2F15%2Fhello-world%2F</url>
+    <content type="text"><![CDATA[Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick StartCreate a new post1$ hexo new "My New Post" More info: Writing Run server1$ hexo server More info: Server Generate static files1$ hexo generate More info: Generating Deploy to remote sites1$ hexo deploy More info: Deployment]]></content>
+      <categories>
+        <category>Others</category>
+      </categories>
+      <tags>
+        <tag>Others</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Java类加载器ClassLoader总结]]></title>
+    <url>%2F2019%2F01%2F09%2FJava%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8ClassLoader%E6%80%BB%E7%BB%93%2F</url>
+    <content type="text"><![CDATA[JAVA类装载方式，有两种: 隐式装载， 程序在运行过程中当碰到通过new 等方式生成对象时，隐式调用类装载器加载对应的类到jvm中。 显式装载， 通过class.forname()等方法，显式加载需要的类 类加载的动态性体现:一个应用程序总是由n多个类组成，Java程序启动时，并不是一次把所有的类全部加载后再运行，它总是先把保证程序运行的基础类一次性加载到jvm中，其它类等到jvm用到的时候再加载，这样的好处是节省了内存的开销，因为java最早就是为嵌入式系统而设计的，内存宝贵，这是一种可以理解的机制，而用到时再加载这也是java动态性的一种体现。 java类装载器JDK 默认提供了如下几种ClassLoader Bootstrp loaderBootstrp加载器是用C++语言写的，它是在Java虚拟机启动后初始化的，它主要负责加载%JAVA_HOME%/jre/lib,-Xbootclasspath参数指定的路径以及%JAVA_HOME%/jre/classes中的类。 ExtClassLoaderBootstrp loader加载ExtClassLoader,并且将ExtClassLoader的父加载器设置为Bootstrp loader.ExtClassLoader是用Java写的，具体来说就是sun.misc.Launcher$ExtClassLoader，ExtClassLoader主要加载%JAVA_HOME%/jre/lib/ext，此路径下的所有classes目录以及java.ext.dirs系统变量指定的路径中类库。 AppClassLoaderBootstrp loader加载完ExtClassLoader后，就会加载AppClassLoader,并且将AppClassLoader的父加载器指定为 ExtClassLoader。AppClassLoader也是用Java写成的，它的实现类是 sun.misc.Launcher$AppClassLoader，另外我们知道ClassLoader中有个getSystemClassLoader方法,此方法返回的正是AppclassLoader.AppClassLoader主要负责加载classpath所指定的位置的类或者是jar文档，它也是Java程序默认的类加载器。 综上所述，它们之间的关系可以通过下图形象的描述： 为什么要有三个类加载器，一方面是分工，各自负责各自的区块，另一方面为了实现委托模型。 类加载器之间是如何协调工作的前面说了，java中有三个类加载器，问题就来了，碰到一个类需要加载时，它们之间是如何协调工作的，即java是如何区分一个类该由哪个类加载器来完成呢。 在这里java采用了委托模型机制，这个机制简单来讲，就是“类装载器有载入类的需求时，会先请示其Parent使用其搜索路径帮忙载入，如果Parent 找不到,那么才由自己依照自己的搜索路径搜索类”. 下面举一个例子来说明，为了更好的理解，先弄清楚几行代码： 123456789101112131415161718Public class Test&#123; Public static void main(String[] arg)&#123; //获取Test类的类加载器 ClassLoader c = Test.class.getClassLoader(); System.out.println(c); //获取c这个类加载器的父类加载器 ClassLoader c1 = c.getParent(); System.out.println(c1); //获取c1这个类加载器的父类加载器 ClassLoader c2 = c1.getParent(); System.out.println(c2); &#125;&#125;// 运行结果：……AppClassLoader…………ExtClassLoader……Null 可以看出Test是由AppClassLoader加载器加载的，AppClassLoader的Parent 加载器是 ExtClassLoader,但是ExtClassLoader的Parent为 null 是怎么回事呵，朋友们留意的话，前面有提到Bootstrap Loader是用C++语言写的，依java的观点来看，逻辑上并不存在Bootstrap Loader的类实体，所以在java程序代码里试图打印出其内容时，我们就会看到输出为null。 类装载器ClassLoader（一个抽象类）描述一下JVM加载class文件的原理机制类装载器就是寻找类或接口字节码文件进行解析并构造JVM内部对象表示的组件，在java中类装载器把一个类装入JVM，经过以下步骤： 装载：查找和导入Class文件 链接：其中解析步骤是可以选择的 检查：检查载入的class文件数据的正确性 准备：给类的静态变量分配存储空间 解析：将符号引用转成直接引用 初始化：对静态变量，静态代码块执行初始化工作 类装载工作由ClassLoder和其子类负责。JVM在运行时会产生三个ClassLoader：根装载器，ExtClassLoader(扩展类装载器)和AppClassLoader，其中根装载器不是ClassLoader的子类，由C++编写，因此在java中看不到他，负责装载JRE的核心类库，如JRE目录下的rt.jar,charsets.jar等。ExtClassLoader是ClassLoder的子类，负责装载JRE扩展目录ext下的jar类包；AppClassLoader负责装载classpath路径下的类包，这三个类装载器存在父子层级关系**，即根装载器是ExtClassLoader的父装载器，ExtClassLoader是AppClassLoader的父装载器。默认情况下使用AppClassLoader装载应用程序的类 Java装载类使用“全盘负责委托机制”。“全盘负责”是指当一个ClassLoder装载一个类时，除非显示的使用另外一个ClassLoder，该类所依赖及引用的类也由这个ClassLoder载入；“委托机制”是指先委托父类装载器寻找目标类，只有在找不到的情况下才从自己的类路径中查找并装载目标类。这一点是从安全方面考虑的，试想如果一个人写了一个恶意的基础类（如java.lang.String）并加载到JVM将会引起严重的后果，但有了全盘负责制，java.lang.String永远是由根装载器来装载，避免以上情况发生。除了JVM默认的三个ClassLoder以外，第三方可以编写自己的类装载器，以实现一些特殊的需求。类文件被装载解析后，在JVM中都有一个对应的java.lang.Class对象，提供了类结构信息的描述。数组，枚举及基本数据类型，甚至void都拥有对应的Class对象。Class类没有public的构造方法，Class对象是在装载类时由JVM通过调用类装载器中的defineClass()方法自动构造的。 为什么要使用这种双亲委托模式呢？因为这样可以避免重复加载，当父亲已经加载了该类的时候，就没有必要子ClassLoader再加载一次。考虑到安全因素，我们试想一下，如果不使用这种委托模式，那我们就可以随时使用自定义的String来动态替代java核心api中定义类型，这样会存在非常大的安全隐患，而双亲委托的方式，就可以避免这种情况，因为String已经在启动时被加载，所以用户自定义类是无法加载一个自定义的ClassLoader。 思考：假如我们自己写了一个java.lang.String的类，我们是否可以替换调JDK本身的类？答案是否定的。我们不能实现。为什么呢？我看很多网上解释是说双亲委托机制解决这个问题，其实不是非常的准确。因为双亲委托机制是可以打破的，你完全可以自己写一个classLoader来加载自己写的java.lang.String类，但是你会发现也不会加载成功，具体就是因为针对java.*开头的类，jvm的实现中已经保证了必须由bootstrp来加载。 定义自已的ClassLoader既然JVM已经提供了默认的类加载器，为什么还要定义自已的类加载器呢？ 因为Java中提供的默认ClassLoader，只加载指定目录下的jar和class，如果我们想加载其它位置的类或jar时，比如：我要加载网络上的一个class文件，通过动态加载到内存之后，要调用这个类中的方法实现我的业务逻辑。在这样的情况下，默认的ClassLoader就不能满足我们的需求了，所以需要定义自己的ClassLoader。 定义自已的类加载器分为两步： 继承java.lang.ClassLoader 重写父类的findClass方法 读者可能在这里有疑问，父类有那么多方法，为什么偏偏只重写findClass方法？ 因为JDK已经在loadClass方法中帮我们实现了ClassLoader搜索类的算法，当在loadClass方法中搜索不到类时，loadClass方法就会调用findClass方法来搜索类，所以我们只需重写该方法即可。如没有特殊的要求，一般不建议重写loadClass搜索类的算法。 线程上下文类加载器 线程上下文类加载器（context class loader）是从 JDK 1.2 开始引入的。类 java.lang.Thread中的方法 getContextClassLoader()和 setContextClassLoader(ClassLoader cl)用来获取和设置线程的上下文类加载器。如果没有通过 setContextClassLoader(ClassLoader cl)方法进行设置的话，线程将继承其父线程的上下文类加载器。Java 应用运行的初始线程的上下文类加载器是系统类加载器。在线程中运行的代码可以通过此类加载器来加载类和资源。 前面提到的类加载器的代理模式并不能解决 Java 应用开发中会遇到的类加载器的全部问题。Java 提供了很多服务提供者接口（Service Provider Interface，SPI），允许第三方为这些接口提供实现。常见的 SPI 有 JDBC、JCE、JNDI、JAXP 和 JBI 等。这些 SPI 的接口由 Java 核心库来提供，如 JAXP 的 SPI 接口定义包含在 javax.xml.parsers包中。这些 SPI 的实现代码很可能是作为 Java 应用所依赖的 jar 包被包含进来，可以通过类路径（CLASSPATH）来找到，如实现了 JAXP SPI 的 Apache Xerces所包含的 jar 包。SPI 接口中的代码经常需要加载具体的实现类。如 JAXP 中的 javax.xml.parsers.DocumentBuilderFactory类中的 newInstance()方法用来生成一个新的 DocumentBuilderFactory的实例。这里的实例的真正的类是继承自 javax.xml.parsers.DocumentBuilderFactory，由 SPI 的实现所提供的。如在 Apache Xerces 中，实现的类是 org.apache.xerces.jaxp.DocumentBuilderFactoryImpl。而问题在于，SPI 的接口是 Java 核心库的一部分，是由引导类加载器来加载的；SPI 实现的 Java 类一般是由系统类加载器来加载的。引导类加载器是无法找到 SPI 的实现类的，因为它只加载 Java 的核心库。它也不能代理给系统类加载器，因为它是系统类加载器的祖先类加载器。也就是说，类加载器的代理模式无法解决这个问题。 线程上下文类加载器正好解决了这个问题。如果不做任何的设置，Java 应用的线程的上下文类加载器默认就是系统上下文类加载器。在 SPI 接口的代码中使用线程上下文类加载器，就可以成功的加载到 SPI 实现的类。线程上下文类加载器在很多 SPI 的实现中都会用到。 类加载器与Web容器 对于运行在 Java EE容器中的 Web 应用来说，类加载器的实现方式与一般的 Java 应用有所不同。不同的 Web 容器的实现方式也会有所不同。以 Apache Tomcat 来说，每个 Web 应用都有一个对应的类加载器实例。该类加载器也使用代理模式，所不同的是它是首先尝试去加载某个类，如果找不到再代理给父类加载器。这与一般类加载器的顺序是相反的。这是 Java Servlet 规范中的推荐做法，其目的是使得 Web 应用自己的类的优先级高于 Web 容器提供的类。这种代理模式的一个例外是：Java 核心库的类是不在查找范围之内的。这也是为了保证 Java 核心库的类型安全。 绝大多数情况下，Web 应用的开发人员不需要考虑与类加载器相关的细节。下面给出几条简单的原则： 每个 Web 应用自己的 Java 类文件和使用的库的 jar 包，分别放在 WEB-INF/classes和 WEB-INF/lib目录下面。 多个应用共享的 Java 类文件和 jar 包，分别放在 Web 容器指定的由所有 Web 应用共享的目录下面。 当出现找不到类的错误时，检查当前类的类加载器和当前线程的上下文类加载器是否正确。 类加载器与OSGiOSGi是 Java 上的动态模块系统。它为开发人员提供了面向服务和基于组件的运行环境，并提供标准的方式用来管理软件的生命周期。OSGi 已经被实现和部署在很多产品上，在开源社区也得到了广泛的支持。Eclipse就是基于OSGi 技术来构建的。 OSGi 中的每个模块（bundle）都包含 Java 包和类。模块可以声明它所依赖的需要导入（import）的其它模块的 Java 包和类（通过 Import-Package），也可以声明导出（export）自己的包和类，供其它模块使用（通过 Export-Package）。也就是说需要能够隐藏和共享一个模块中的某些 Java 包和类。这是通过 OSGi 特有的类加载器机制来实现的。OSGi 中的每个模块都有对应的一个类加载器。它负责加载模块自己包含的 Java 包和类。当它需要加载 Java 核心库的类时（以 java开头的包和类），它会代理给父类加载器（通常是启动类加载器）来完成。当它需要加载所导入的 Java 类时，它会代理给导出此 Java 类的模块来完成加载。模块也可以显式的声明某些 Java 包和类，必须由父类加载器来加载。只需要设置系统属性org.osgi.framework.bootdelegation的值即可。 假设有两个模块 bundleA 和 bundleB，它们都有自己对应的类加载器 classLoaderA 和 classLoaderB。在 bundleA 中包含类com.bundleA.Sample，并且该类被声明为导出的，也就是说可以被其它模块所使用的。bundleB 声明了导入 bundleA 提供的类 com.bundleA.Sample，并包含一个类com.bundleB.NewSample继承自com.bundleA.Sample。在 bundleB 启动的时候，其类加载器 classLoaderB 需要加载类com.bundleB.NewSample，进而需要加载类 com.bundleA.Sample。由于 bundleB 声明了类com.bundleA.Sample是导入的，classLoaderB 把加载类com.bundleA.Sample的工作代理给导出该类的 bundleA 的类加载器 classLoaderA。classLoaderA 在其模块内部查找类com.bundleA.Sample并定义它，所得到的类 com.bundleA.Sample实例就可以被所有声明导入了此类的模块使用。对于以 java开头的类，都是由父类加载器来加载的。如果声明了系统属性 org.osgi.framework.bootdelegation=com.example.core.*，那么对于包 com.example.core中的类，都是由父类加载器来完成的。 OSGi 模块的这种类加载器结构，使得一个类的不同版本可以共存在 Java 虚拟机中，带来了很大的灵活性。不过它的这种不同，也会给开发人员带来一些麻烦，尤其当模块需要使用第三方提供的库的时候。下面提供几条比较好的建议： 如果一个类库只有一个模块使用，把该类库的 jar 包放在模块中，在 Bundle-ClassPath中指明即可。 如果一个类库被多个模块共用，可以为这个类库单独的创建一个模块，把其它模块需要用到的 Java 包声明为导出的。其它模块声明导入这些类。 如果类库提供了 SPI 接口，并且利用线程上下文类加载器来加载 SPI 实现的 Java 类，有可能会找不到 Java 类。如果出现了 NoClassDefFoundError异常，首先检查当前线程的上下文类加载器是否正确。通过 Thread.currentThread().getContextClassLoader()就可以得到该类加载器。该类加载器应该是该模块对应的类加载器。如果不是的话，可以首先通过 class.getClassLoader()来得到模块对应的类加载器，再通过 Thread.currentThread().setContextClassLoader()来设置当前线程的上下文类加载器。 参考 http://blog.csdn.net/zhoudaxia/article/details/35897057 http://blog.jobbole.com/96145/ http://my.oschina.net/aminqiao/blog/262601 转载：https://www.cnblogs.com/doit8791/p/5820037.html]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[kettle笔记]]></title>
+    <url>%2F2018%2F11%2F13%2Fkettle%E7%AC%94%E8%AE%B0%2F</url>
+    <content type="text"><![CDATA[资源 官网：https://www.hitachivantara.com/zh-cn 产品介绍：https://www.hitachivantara.com/zh-cn/products.html 公司介绍：https://www.hitachivantara.com/zh-cn/company.html Pentaho 官方社区：https://community.hitachivantara.com/community/products-and-solutions/pentaho Pentaho 资源下载：https://community.hitachivantara.com/docs/DOC-1009931-downloads Pentaho 文档：https://help.pentaho.com/Documentation/8.1 Kettle（PDI）介绍：https://www.hitachivantara.com/zh-cn/products/big-data-integration-analytics/pentaho-data-integration.html Kettle（PDI）文档1：https://community.hitachivantara.com/docs/DOC-1009855-data-integration-kettle Kettle（PDI）文档2：https://wiki.pentaho.com/display/EAI/Latest+Pentaho+Data+Integration+%28aka+Kettle%29+Documentation Kettle（PDI）开发手册：https://help.pentaho.com/Documentation/8.1/Developer_Center/PDI Kettle（PDI）代码地址：https://github.com/pentaho/pentaho-kettle/ Carte User Documentation：https://wiki.pentaho.com/display/EAI/Carte+User+Documentation 大数据插件下载：https://sourceforge.net/projects/pentaho/files/Big%20Data%20Shims/ api：https://javadoc.pentaho.com/ FAQ Pentaho Community Edition Versus Pentaho Enterprise Edition Is Kerberos auth Enterprise only? kettle是什么？Kettle（PDI） 是 Hitachi Vantara 公司的数据集成分析产品 Pentaho [pæn’tɑːhəʊ] 套件的数据集成工具 Data Integration，是一款开源的 ETL 工具，官网定义如下： Data IntegrationPentaho’s Data Integration, also known as Kettle, delivers powerful extraction, transformation, and loading (ETL) capabilities. Kettle 中文名称叫水壶，该项目的主程序员 MATT 希望把各种数据放到一个壶里，然后以一种指定的格式流出。目前包括4个产品：Spoon、Pan、CHEF、Kitchen 。 SPOON ：允许你通过图形界面来设计ETL转换过程 Transformation。 PAN ：允许你批量运行由 Spoon 设计的 ETL 转换 (例如使用一个时间调度器)。Pan 是一个后台执行的程序，没有图形界面。 CHEF ：允许你创建任务 Job。 任务通过允许每个转换，任务，脚本等等，更有利于自动化更新数据仓库的复杂工作。任务通过允许每个转换，任务，脚本等等。任务将会被检查，看看是否正确地运行了。 KITCHEN ：允许你批量使用由 Chef 设计的任务 (例如使用一个时间调度器)。KITCHEN 也是一个后台运行的程序。]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>kettle</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[时间清单:立了FLAG就要去做]]></title>
+    <url>%2F2018%2F10%2F25%2F%E6%97%B6%E9%97%B4%E6%B8%85%E5%8D%95%2F</url>
+    <content type="text"><![CDATA[未来三年的方向： 学习和初步掌握AI技术。 和家人出国旅游至少两次。 找到一个副业，可以利用自己的专业特长。 每个月需要完成的事情 写一篇文章。 每周保持身体和精神健康的事情 健身房打卡两次。 周末至少有一个下午看看书，不是在家里。 一项长期爱好 作为一个没有唯一性的兴趣爱好的人，我觉得很有必要找到自己的喜好，并坚持下来，同时也是认清自己的一个过程。 定位中。。。]]></content>
+      <categories>
+        <category>计划</category>
+      </categories>
+      <tags>
+        <tag>时间清单</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[IaaS，PaaS，SaaS 的区别（转载）:讲的很生动，一直很喜欢看阮一峰的博客，感谢！]]></title>
+    <url>%2F2018%2F09%2F30%2FIaaS%EF%BC%8CPaaS%EF%BC%8CSaaS%20%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%88%E8%BD%AC%E8%BD%BD%EF%BC%89%2F</url>
+    <content type="text"><![CDATA[原文地址]]></content>
+      <categories>
+        <category>转载</category>
+      </categories>
+      <tags>
+        <tag>Reprinted</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[读书笔记之《松浦弥太郎的100个基本人生信条》:他山之石可以攻玉！]]></title>
+    <url>%2F2018%2F09%2F30%2F%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%E4%B9%8B%E3%80%8A%E6%9D%BE%E6%B5%A6%E5%BC%A5%E5%A4%AA%E9%83%8E%E7%9A%84100%E4%B8%AA%E5%9F%BA%E6%9C%AC%E4%BA%BA%E7%94%9F%E4%BF%A1%E6%9D%A1%E3%80%8B%2F</url>
+    <content type="text"><![CDATA[此文抄录《松浦弥太郎的100个基本人生信条》，其中有一些信条比较惊艳的打动了我，有些且不敢苟同，有些信条甚至相互矛盾。不过可以确定的是，每个人不同的人生阶段都会秉持着独特的一些人生信条或坚守或奋斗着。阅读本书的最大的感触就是居然有人在这个世界上秉持着这样的信念生活着，然后自省吾身（#2018年9月29日#此时老婆在旁边说，你应该反省下：我TM到底是有多胖！），或许我现在的想法是不是有问题的。 这本书是我人生第一份工作的BOSS亲笔签名赠送，在书桌的角落已落灰，准备清理的时候被老婆翻出来；于是某一天我开始读了起来。 100个基本@松浦弥太郎的人生信条001一切自己负责。指责他人也无济于事。好事、坏事，我们会经历各种事情。无论发生什么事，我认为“一切的起因都在于自己”。不推到他人、社会的身上，不去指责他人，也不怨恨这社会。不管发生什么，自己处理，自己主动承担责任。大体的事情，都可以自己负责解决。只有带着“说服自己的关键是在于自己”的觉悟，才可能不依存于他人，用自己的双脚走下去。 感悟： 以上我大概只赞同大体的事情，都可以自己负责解决,这比较像我的性格。但是这样也存在一个问题，那就是我虽然独立起来了，但办事的效率其实特别低下。其实只是开口的时间，周围的资源就可以很好的被你利用起来。 作者的这信条是比较佛性了，我是达不到这种境界。但我理解应该遇事对自己情绪的管控，与其浪费无谓的的心情和精力去责怪、去愤懑，不如思考如何将坏事的影响和损失弥补回来，总结得失，以免再犯。 越来越理解，成长就是发现自己，剖析认清自己的一个过程。然后，你得不得不承认和接受自己的劣根性，从一开始的讨厌自己，到后面接纳自己的一个觉悟。 002舍弃自尊，凡事忍耐。自尊心，不是用来肆意宣扬的武器。将自尊深藏于内心就好。舍弃自尊，凡事忍耐。这两条，是我所尊敬的一位名编辑教给我的，让工作得以长久的秘诀。“动不动就是暴怒的话，工作就无法开展。请舍弃自尊，即便觉得不对也学会忍耐。保持冷静思考。”这是我从他身上学到的珍贵哲理。 感悟： 年轻气盛的你，大概看到这个标题，心里就开始不屑一顾了吧，尤其在这个张扬个性，放飞自我的年代。 社会把大多数的棱角磨平，或许是好事儿，因为至少你懂得的迂回、避让和忍耐。这就是成人的规则。]]></content>
+      <categories>
+        <category>读书笔记</category>
+      </categories>
+      <tags>
+        <tag>格言</tag>
+        <tag>信条</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Java11新特性]]></title>
+    <url>%2F2018%2F09%2F27%2FJava11%E6%96%B0%E7%89%B9%E6%80%A7%2F</url>
+    <content type="text"><![CDATA[Java 11 String 字符串新增 API 教程 Java11正式发布了，让你的代码更完美？]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[我的程序员之路：持续学习，疯狂升级！]]></title>
+    <url>%2F2018%2F09%2F27%2F%E6%88%91%E7%9A%84%E7%A8%8B%E5%BA%8F%E5%91%98%E4%B9%8B%E8%B7%AF%2F</url>
+    <content type="text"><![CDATA[程序员为什么要持续学习]]></content>
+      <categories>
+        <category>转载</category>
+      </categories>
+      <tags>
+        <tag>程序员</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Docker理解]]></title>
+    <url>%2F2018%2F09%2F25%2FDocker%E7%90%86%E8%A7%A3%2F</url>
+    <content type="text"><![CDATA[正文什么是 Docker ?Docker的思想来自于集装箱，集装箱解决了什么问题？在一艘大船上，可以把货物规整的摆放起来。并且各种各样的货物被集装箱标准化了，集装箱和集装箱之间不会互相影响。那么我就不需要专门运送水果的船和专门运送化学品的船了。只要这些货物在集装箱里封装的好好的，那我就可以用一艘大船把他们都运走。docker就是类似的理念。现在都流行云计算了，云计算就好比大货轮。docker就是集装箱。 不同的应用程序可能会有不同的应用环境，比如.net开发的网站和php开发的网站依赖的软件就不一样，如果把他们依赖的软件都安装在一个服务器上就要调试很久，而且很麻烦，还会造成一些冲突。比如IIS和Apache访问端口冲突。这个时候你就要隔离.net开发的网站和php开发的网站。常规来讲，我们可以在服务器上创建不同的虚拟机在不同的虚拟机上放置不同的应用，但是虚拟机开销比较高。docker可以实现虚拟机隔离应用环境的功能，并且开销比虚拟机小，小就意味着省钱了。 你开发软件的时候用的是Ubuntu，但是运维管理的都是centos，运维在把你的软件从开发环境转移到生产环境的时候就会遇到一些Ubuntu转centos的问题，比如：有个特殊版本的数据库，只有Ubuntu支持，centos不支持，在转移的过程当中运维就得想办法解决这样的问题。这时候要是有docker你就可以把开发环境直接封装转移给运维，运维直接部署你给他的docker就可以了。而且部署速度快。 在服务器负载方面，如果你单独开一个虚拟机，那么虚拟机会占用空闲内存的，docker部署的话，这些内存就会利用起来。总之docker就是集装箱原理。 作者：刘允鹏链接：https://www.zhihu.com/question/28300645/answer/67707287来源：知乎著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。 参考资料 大白话Docker入门（一） 大白话Docker入门（二） 【技术干货】Docker精华学习资料集锦，老司机快上车]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>Docker</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[读书清单]]></title>
+    <url>%2F2018%2F09%2F25%2F%E8%AF%BB%E4%B9%A6%E6%B8%85%E5%8D%95%2F</url>
+    <content type="text"><![CDATA[2018完成 《程序员职业小白书-如何规划和经营你的职业》 阅读进度：100% 读书笔记 进行中 《HeadFirst设计模式》 阅读进度：10% 读书笔记 《松浦弥太郎的100个基本人生信条》 阅读进度：10% 读书笔记 心愿清单 《码出高效：Java 开发手册》]]></content>
+      <categories>
+        <category>书单</category>
+      </categories>
+      <tags>
+        <tag>Reading</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[GitHub项目收藏]]></title>
+    <url>%2F2018%2F09%2F20%2FGitHub%E9%A1%B9%E7%9B%AE%E6%94%B6%E8%97%8F%2F</url>
+    <content type="text"><![CDATA[Alibaba Java Diagnostic Tool Arthas/Alibaba Java诊断利器Arthas Arthas 用户文档：https://alibaba.github.io/arthas/ 简介：Arthas 是Alibaba开源的Java诊断工具，深受开发者喜爱。当你遇到以下类似问题而束手无策时，Arthas可以帮助你解决：这个类从哪个 jar 包加载的？为什么会报各种类相关的 Exception？我改的代码为什么没有执行到？难道是我没 commit？分支搞错了？遇到问题无法在线上 debug，难道只能通过加日志再重新发布吗？线上遇到某个用户的数据处理有问题，但线上同样无法 debug，线下无法重现！是否有一个全局视角来查看系统的运行状况？有什么办法可以监控到JVM的实时运行状态？Arthas采用命令行交互模式，同时提供丰富的 Tab 自动补全功能，进一步方便进行问题的定位和诊断。]]></content>
+      <categories>
+        <category>转载</category>
+      </categories>
+      <tags>
+        <tag>GitHub</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[ibatis支持JdbcType类型]]></title>
+    <url>%2F2018%2F09%2F20%2Fibatis%E6%94%AF%E6%8C%81JdbcType%E7%B1%BB%E5%9E%8B%2F</url>
+    <content type="text"><![CDATA[直接看JdbcType类 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465//// Source code recreated from a .class file by IntelliJ IDEA// (powered by Fernflower decompiler)//package org.apache.ibatis.type;import java.util.HashMap;import java.util.Map;public enum JdbcType &#123; ARRAY(2003), BIT(-7), TINYINT(-6), SMALLINT(5), INTEGER(4), BIGINT(-5), FLOAT(6), REAL(7), DOUBLE(8), NUMERIC(2), DECIMAL(3), CHAR(1), VARCHAR(12), LONGVARCHAR(-1), DATE(91), TIME(92), TIMESTAMP(93), BINARY(-2), VARBINARY(-3), LONGVARBINARY(-4), NULL(0), OTHER(1111), BLOB(2004), CLOB(2005), BOOLEAN(16), CURSOR(-10), UNDEFINED(-2147482648), NVARCHAR(-9), NCHAR(-15), NCLOB(2011), STRUCT(2002); public final int TYPE_CODE; private static Map&lt;Integer, JdbcType&gt; codeLookup = new HashMap(); private JdbcType(int code) &#123; this.TYPE_CODE = code; &#125; public static JdbcType forCode(int code) &#123; return (JdbcType)codeLookup.get(code); &#125; static &#123; JdbcType[] arr$ = values(); int len$ = arr$.length; for(int i$ = 0; i$ &lt; len$; ++i$) &#123; JdbcType type = arr$[i$]; codeLookup.put(type.TYPE_CODE, type); &#125; &#125;&#125;]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>Mybatis</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[读书笔记之《HeadFirst设计模式》]]></title>
+    <url>%2F2018%2F09%2F14%2F%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%E4%B9%8B%E3%80%8AHeadFirst%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E3%80%8B%2F</url>
+    <content type="text"><![CDATA[前言设计模式，在我理解就是代码实践过程中，编码原则的一种提炼，用于应对各种复杂的项目场景。 使用模式最好的方式是：把模式装进脑子里，然后在你的设计和已有的应用中，寻找何处可以使用他们。以往是代码复用，现在是经验复用。 正文工厂模式单例模式]]></content>
+      <categories>
+        <category>读书笔记</category>
+      </categories>
+      <tags>
+        <tag>Java</tag>
+        <tag>设计模式</tag>
+        <tag>Reading</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[FindBugs分析记录]]></title>
+    <url>%2F2018%2F09%2F13%2FFindBugs%E5%88%86%E6%9E%90%E8%AE%B0%E5%BD%95%2F</url>
+    <content type="text"><![CDATA[前言FindBugs解决方案。 参考 官网手册 用FindBugs分析代码漏洞 正文EI: May expose internal representation by returning reference to mutable object 官方描述 Returning a reference to a mutable object value stored in one of the object’s fields exposes the internal representation of the object. If instances are accessed by untrusted code, and unchecked changes to the mutable object would compromise security or other important properties, you will need to do something different. Returning a new copy of the object is better approach in many situations. 解决方案 EI2: May expose internal representation by incorporating reference to mutable object 官方描述 This code stores a reference to an externally mutable object into the internal representation of the object. If instances are accessed by untrusted code, and unchecked changes to the mutable object would compromise security or other important properties, you will need to do something different. Storing a copy of the object is better approach in many situations. 解决方案 Field is a mutable collection 官方描述 A mutable collection instance is assigned to a final static field, thus can be changed by malicious code or by accident from another package. Consider wrapping this field into Collections.unmodifiableSet/List/Map/etc. to avoid this vulnerability. 解决方案 1234567891011121314151617181920import java.util.Collections;import java.util.HashMap;import java.util.Map;...public static final Map&lt;String, Object&gt; ENGIN_DATATYPE;static &#123; Map&lt;String, Object&gt; aMap = new HashMap(); aMap.put("Number", "NUMBER,FLOAT,DOUBLE,DECIMAL,BINARY_FLOAT,BINARY_DOUBLE"); aMap.put("String", "STRING,VARCHAR,CHAR,NCHAR,VARCHAR2,NVARCHAR2"); aMap.put("Date", "DATE"); aMap.put("Boolean", "BOOLEAN"); aMap.put("Integer", "INTEGER,TINYINT,SMALLINT,MEDIUMINT,INT"); aMap.put("BigNumber", "BIGNUMBER,BIGINT"); aMap.put("Binary", "BINARY"); aMap.put("Timestamp", "TIMESTAMP,DATETIME"); aMap.put("Internet Address", "INTERNET ADDRESS"); ENGIN_DATATYPE = Collections.unmodifiableMap(aMap); // 创建不可变集合&#125;]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>FindBugs</tag>
+        <tag>Java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[家庭保险方案原则]]></title>
+    <url>%2F2018%2F09%2F11%2F%E5%AE%B6%E5%BA%AD%E4%BF%9D%E9%99%A9%E6%96%B9%E6%A1%88%2F</url>
+    <content type="text"><![CDATA[前言珊珊来迟的保险意识。 品牌选择 招商仁和 平安保险 原则 纯寿险：可以考虑附加减额定寿 重疾、轻疾：爱倍至同时保障了这两种，不过是有返还的，估计是比纯消费型贵的？或者选择其他产品？或者去除返还？ 可以不要返还，来换取更高的保额？？？ 住院医疗： 报销医疗费用，负责保险，上面两种负责赔付！ 文章介绍推荐欢迎关注微信公众号：深蓝保（shenlanbao）简书 个人觉得不错，把保险产品的利害剖析得很到位，同时也很简单易懂，适合小白。]]></content>
+      <categories>
+        <category>生活经验</category>
+      </categories>
+      <tags>
+        <tag>保险/重疾/轻疾/人寿</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[漂亮的代码，精妙的实现！]]></title>
+    <url>%2F2018%2F03%2F02%2F%E6%BC%82%E4%BA%AE%E7%9A%84%E4%BB%A3%E7%A0%81%2F</url>
+    <content type="text"><![CDATA[禁止转载 前言 主要是为了备份日常工作或学习过程中，觉得有所感触的代码实现过程，便于后续重复使用。 正文PLSQL游标锁表、循环更新123456CURSOR c2 IS SELECT aac002 FROM IEA4 WHERE CIE578 = PI_CIE578 FOR UPDATE; ...FOR v2 IN c2 LOOP UPDATE IEA4 SET AAC002 = nvl(pkg_fun.f_sfzhm15to18(aac002), aac002) WHERE CURRENT OF c2;END LOOP; MYSQL查看编码格式 查看数据库编码格式 1show variables like 'character_set_database'; 查看数据表的编码格式 1show create table &lt;表名&gt;; JAVA同步&amp;异步httpClient请求- 实现123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114115116117118119120121122123124125126127128129130131132133134135136137138139140141142143144145146147148149150151152153154155156157158159160161162163164165166167168169170171172173174175176177178179180181182183184185186187188189190191192193194195196197198import org.apache.http.HttpEntity;import org.apache.http.HttpResponse;import org.apache.http.HttpStatus;import org.apache.http.NameValuePair;import org.apache.http.client.HttpClient;import org.apache.http.client.entity.UrlEncodedFormEntity;import org.apache.http.client.methods.CloseableHttpResponse;import org.apache.http.client.methods.HttpGet;import org.apache.http.client.methods.HttpPost;import org.apache.http.concurrent.FutureCallback;import org.apache.http.entity.StringEntity;import org.apache.http.impl.client.CloseableHttpClient;import org.apache.http.impl.client.DefaultHttpClient;import org.apache.http.impl.client.HttpClients;import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;import org.apache.http.impl.nio.client.HttpAsyncClients;import org.apache.http.message.BasicNameValuePair;import org.apache.http.util.EntityUtils;import java.io.UnsupportedEncodingException;import java.nio.charset.Charset;import java.util.ArrayList;import java.util.List;import java.util.Map;public class HttpClientUtil &#123; /** * 发送POST 支持http、https * * @param url post地址 * @param paramMap 要传递的参数封装成Map */ public static String sendPost(String url, Map&lt;String, String&gt; paramMap) &#123; String returnmsg = ""; try &#123; //封装参数 List&lt;NameValuePair&gt; parameters = new ArrayList&lt;NameValuePair&gt;(); if (paramMap != null &amp;&amp; paramMap.keySet() != null) &#123; for (String key : paramMap.keySet()) &#123; parameters.add(new BasicNameValuePair(key, paramMap.get(key))); &#125; &#125; //创建UrlEncodedFormEntity对象 UrlEncodedFormEntity formEntiry = new UrlEncodedFormEntity(parameters, "UTF-8"); if (url.startsWith("https")) &#123; //returnmsg=sendPostHttps(url,formEntiry); &#125; else &#123; returnmsg = sendPostHttp(url, formEntiry); &#125; &#125; catch (Exception e) &#123; e.printStackTrace(); &#125; return returnmsg; &#125; //发送http请求 public static String sendPostHttp(String url, UrlEncodedFormEntity formEntiry) &#123; // 发送请求 HttpClient client = new DefaultHttpClient(); String returnmsg = "fail"; //失败 try &#123; //实例化HTTP POST方法 HttpPost postmethod = new HttpPost(url); postmethod.setEntity(formEntiry); //执行请求 HttpResponse reponse = client.execute(postmethod); //回去返回实体 HttpEntity entity = reponse.getEntity(); returnmsg = EntityUtils.toString(entity, "UTF-8"); //System.out.println("POST返回数据:"+returnmsg); //若返回消息有中文要进行一下解码 服务器要加码URLEncoder.encode("服务器返回中文", "UTF-8") //System.out.println("POST返回数据--:"+URLDecoder.decode(returnmsg,"utf-8")); &#125; catch (Exception e) &#123; returnmsg = "fail"; e.printStackTrace(); &#125; finally &#123; //关闭连接,释放资源 client.getConnectionManager().shutdown(); &#125; return returnmsg; &#125; /** * application/json * * @param url * @param params * @return */ public static String sendPostHttpJson(String url, String params) &#123; HttpClient httpClient = null; HttpPost postMethod = null; HttpResponse response = null; String returnmsg = "fail"; //失败 try &#123; httpClient = HttpClients.createDefault(); postMethod = new HttpPost(url);//传入URL地址 postMethod.addHeader("Content-type", "application/json; charset=utf-8"); postMethod.setEntity(new StringEntity(params, Charset.forName("UTF-8"))); response = httpClient.execute(postMethod);//获取响应 int statusCode = response.getStatusLine().getStatusCode(); HttpEntity httpEntity = response.getEntity(); String reponseContent = EntityUtils.toString(httpEntity); EntityUtils.consume(httpEntity);//释放资源 if (statusCode == HttpStatus.SC_OK) &#123; returnmsg = reponseContent; &#125; &#125; catch (Exception e) &#123; e.printStackTrace(); &#125; return returnmsg; &#125; /** * 发送GET请求 * * @param url * @return */ public static String doGet(String url) &#123; String reqUrl = url; CloseableHttpResponse response = null; CloseableHttpClient client = null; HttpGet httpGet = new HttpGet(reqUrl); String result = "fail"; //失败 try &#123; client = HttpClients.createDefault(); response = client.execute(httpGet); int statusCode = response.getStatusLine().getStatusCode(); HttpEntity httpEntity = response.getEntity(); String reponseContent = EntityUtils.toString(httpEntity); EntityUtils.consume(httpEntity);//释放资源 if (statusCode == HttpStatus.SC_OK) &#123; result = reponseContent; &#125; &#125; catch (Exception e) &#123; e.printStackTrace(); &#125; return result; &#125; /** * 发送异步POST请求 * * @param url post地址 * @param paramMap 要传递的参数封装成Map */ public static void sendAsyncPost(String url, Map&lt;String, String&gt; paramMap, FutureCallback callback) &#123; //封装参数 List&lt;NameValuePair&gt; parameters = new ArrayList&lt;NameValuePair&gt;(); if (paramMap != null &amp;&amp; paramMap.keySet() != null) &#123; for (String key : paramMap.keySet()) &#123; parameters.add(new BasicNameValuePair(key, paramMap.get(key))); &#125; &#125; CloseableHttpAsyncClient httpAsyncClient = HttpAsyncClients.createDefault(); HttpPost httpPost = new HttpPost(url); try &#123; UrlEncodedFormEntity formEntiry = new UrlEncodedFormEntity(parameters, "UTF-8"); httpPost.setEntity(formEntiry); //start httpAsyncClient.start(); //异步请求 httpAsyncClient.execute(httpPost, callback); &#125; catch (UnsupportedEncodingException e) &#123; e.printStackTrace(); &#125; /*try &#123; httpAsyncClient.close(); &#125; catch (IOException e) &#123; e.printStackTrace(); &#125;*/ &#125; /** * 发送异步GET请求 * * @param url post地址 */ public static void doAsyncGet(String url, FutureCallback callback) &#123; CloseableHttpAsyncClient httpAsyncClient = HttpAsyncClients.createDefault(); HttpGet httpGet = new HttpGet(url); //start httpAsyncClient.start(); //异步请求 httpAsyncClient.execute(httpGet, callback); /*try &#123; httpAsyncClient.close(); &#125; catch (IOException e) &#123; e.printStackTrace(); &#125;*/ &#125;&#125; - 调用示例12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061/** * 调用示例 */Map&lt;String, String&gt; reqmap = new HashMap&lt;&gt;();reqmap.put("basicPropertits", jobPropertyJson.toString());reqmap.put("collectPropertits", jobConfigJson.toString());reqmap.put("dataStore", jobStoreJson.toString());reqmap.put("templatetList", jobProcJson.toString());HttpClientUtil.sendAsyncPost(clctEngineMethodCollectTemplateUrl, reqmap, new launchServiceCallBack(id));/** * http异步请求回调处理 */private class launchServiceCallBack implements FutureCallback&lt;HttpResponse&gt; &#123; private int jobId = 0; launchServiceCallBack(int _iJobid) &#123; this.jobId = _iJobid; &#125; /** * 请求完成后调用该函数 */ @Override public void completed(HttpResponse httpResponse) &#123; HttpEntity entity = httpResponse.getEntity(); String rtnMsg = "&#123;\"code\":\"fail\"&#125;"; String code = "fail"; try &#123; rtnMsg = EntityUtils.toString(entity, "UTF-8"); Map&lt;String, String&gt; reqmap = (Map) JSONObject.fromObject(rtnMsg); code = reqmap.get("code").toString(); if (code.equals(String.valueOf(HttpStatus.SC_OK))) &#123; JobProperty load = jobPropertyService.load(this.jobId); load.setReleaseStatus(CollectionConstant.WHETHER_YES); load.setReleaseTime(new Date()); jobPropertyService.update(load); &#125; &#125; catch (IOException e) &#123; e.printStackTrace(); &#125; &#125; /** * 请求失败后调用该函数 */ @Override public void failed(Exception e) &#123; System.out.println("failed"); &#125; /** * 请求取消后调用该函数 */ @Override public void cancelled() &#123; System.out.println("cancelled"); &#125;&#125; - 注意事项 调用完成时，需及时关闭回收httpAsyncClient]]></content>
+      <categories>
+        <category>备忘</category>
+      </categories>
+      <tags>
+        <tag>Coding</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[牛客网之刷题系列]]></title>
+    <url>%2F2017%2F12%2F07%2F%E7%89%9B%E5%AE%A2%E7%BD%91%E4%B9%8B%E5%88%B7%E9%A2%98%E7%B3%BB%E5%88%97%2F</url>
+    <content type="text"><![CDATA[牛客网 java专项练习equals方法【题目1】 有程序片段如下，以下表达式结果为 true 的是（B）Float s=new Float(0.1f);Float t=new Float(0.1f);Double u=new Double(0.1); A. s==tB. s.equals(t)C. u.equals(s)D. t.equals(u) 答案解析 Float类和Double类都重写对于的equals方法，在比较之前都会判断是否同属于Float对象或Double对象，如果不是直接返回false，如果是再继续比较对应的数值大小。 题目A比较的是两个对象的地址，显然不同的对象地址不同，A是false。B同属于Float对象且值相等，true。C和D比较的对象不同，false。 JDK1.8的源码如下： 1234567891011&gt; // Float类重写了equals方法：&gt; public boolean equals(Object obj) &#123;&gt; return (obj instanceof Float)&gt; &amp;&amp; (floatToIntBits(((Float)obj).value) == floatToIntBits(value));&gt; &#125;&gt; // Double类重写了equals方法：&gt; public boolean equals(Object obj) &#123;&gt; return (obj instanceof Double)&gt; &amp;&amp; (doubleToLongBits(((Double)obj).value) == doubleToLongBits(value));&gt; &#125;&gt; Object类的描述【题目1】 以下关于Object类的说法正确的是（B）A. Java中所有的类都直接或间接继承自Object，无论是否明确的指明，无论其是否是抽象类。B. Java中的接口(interface)也继承了Object类C. 利用”==”比较两个对象时，Java调用继承自Object的equals方法，判断是否相等。D. 如果类的定义中没有重新定义toString()方法，则该类创建的对象无法使用toStrig()方法。 答案解析 类Object是类层次结构的根类。每个类都使用Object作为超类。所有对象（包括数组）都实现这个类的方法。 接口和类是两个概念，但接口又和类具有一定的关系。类class是从java.lang.Object类派生而来，但接口interface并不是从某一个特定接口派生而来，两个interface可能没有任何交集，但两个class一定存在交集。接口不是Object的子类，但接口却隐士申明了Object中的所有可继承方法，类似于Object子类继承了它的所有可继承方法，区别只是这里申明的方法都是abstract形式，也即只有申明，没有方法体block。 对于指向对象类型的变量，如果要比较两个变量是否指向同一个对象，即判断这两个对象时（不是比较这两个对象的内容）这时候需要用==操作符进行比较。但equals方法是用于比较两个独立对象的内容是否相同 所有对象（包括数组）都实现object的方法，object里面有toString() 这个方法，所以即使类的定义中没有重新定义toString()方法，但是它同样可以使用toString这个方法（因为它继承了Object这个类） 集合【题目1】 判断对错。List，Set，Map都继承自继承Collection接口。（A）A. 错B. 对 答案解析]]></content>
+      <categories>
+        <category>学习笔记</category>
+      </categories>
+      <tags>
+        <tag>牛客网刷题</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[读书笔记之《程序员职业小白书-如何规划和经营你的职业》]]></title>
+    <url>%2F2017%2F12%2F02%2F%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0%E4%B9%8B%E3%80%8A%E7%A8%8B%E5%BA%8F%E5%91%98%E8%81%8C%E4%B8%9A%E5%B0%8F%E7%99%BD%E4%B9%A6-%E5%A6%82%E4%BD%95%E8%A7%84%E5%88%92%E5%92%8C%E7%BB%8F%E8%90%A5%E4%BD%A0%E7%9A%84%E8%81%8C%E4%B8%9A%E3%80%8B%2F</url>
+    <content type="text"><![CDATA[原著阅读：掘金小册：程序员职业小白书 —- 如何规划和经营你的职业 职业规划三个工具 职业价值论 职业象限和路线图 职业画布 价值论 你值多少钱？ 公司雇佣一个人，并不是看他有多牛，而是看他能给公司带来哪些价值； 市场需求 专注细分市场：行业和技术的交叉，比如华资； 专注新兴市场：比如互联网、大数据、人工智能； 信息透明度 要做选择题，不要做判断题； 求职渠道越多，信息就越透明； 渠道优略：内推&gt;拍卖&gt;猎头&gt;官网/招聘 四大象限 雇员象限 管理线 专家线 SOHO象限 创业象限&amp;投资象限 技术岗位图 职业画布 简历 FAB法则： 简历模板 职业经营程序员的本质 DRY: Don’t Repeat Yourself WET: Write Everything Twice 技术方向和编程语言 Python：人工智能 JavaScript：前端和全端 Go：云计算和容器管理 PHP：网站的首选 Java：大数据分析 趋势 Web的富媒体化 后移动互联网时代 后端开发的平台化 AI First 时代已经到来]]></content>
+      <categories>
+        <category>读书笔记</category>
+      </categories>
+      <tags>
+        <tag>职业规划</tag>
+      </tags>
+  </entry>
+</search>
