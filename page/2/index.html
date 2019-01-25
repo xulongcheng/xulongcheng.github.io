@@ -519,6 +519,181 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://xulongcheng.github.io/2018/09/20/ibatis支持JdbcType类型/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lucien">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="龙城">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                
+                <a href="/2018/09/20/ibatis支持JdbcType类型/" class="post-title-link" itemprop="url">ibatis支持JdbcType类型</a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2018-09-20 00:00:00" itemprop="dateCreated datePublished" datetime="2018-09-20T00:00:00+08:00">2018-09-20</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2019-01-22 17:37:17" itemprop="dateModified" datetime="2019-01-22T17:37:17+08:00">2019-01-22</time>
+              
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/学习笔记/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>直接看JdbcType类</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// Source code recreated from a .class file by IntelliJ IDEA</span></span><br><span class="line"><span class="comment">// (powered by Fernflower decompiler)</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">package</span> org.apache.ibatis.type;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> JdbcType &#123;</span><br><span class="line">    ARRAY(<span class="number">2003</span>),</span><br><span class="line">    BIT(-<span class="number">7</span>),</span><br><span class="line">    TINYINT(-<span class="number">6</span>),</span><br><span class="line">    SMALLINT(<span class="number">5</span>),</span><br><span class="line">    INTEGER(<span class="number">4</span>),</span><br><span class="line">    BIGINT(-<span class="number">5</span>),</span><br><span class="line">    FLOAT(<span class="number">6</span>),</span><br><span class="line">    REAL(<span class="number">7</span>),</span><br><span class="line">    DOUBLE(<span class="number">8</span>),</span><br><span class="line">    NUMERIC(<span class="number">2</span>),</span><br><span class="line">    DECIMAL(<span class="number">3</span>),</span><br><span class="line">    CHAR(<span class="number">1</span>),</span><br><span class="line">    VARCHAR(<span class="number">12</span>),</span><br><span class="line">    LONGVARCHAR(-<span class="number">1</span>),</span><br><span class="line">    DATE(<span class="number">91</span>),</span><br><span class="line">    TIME(<span class="number">92</span>),</span><br><span class="line">    TIMESTAMP(<span class="number">93</span>),</span><br><span class="line">    BINARY(-<span class="number">2</span>),</span><br><span class="line">    VARBINARY(-<span class="number">3</span>),</span><br><span class="line">    LONGVARBINARY(-<span class="number">4</span>),</span><br><span class="line">    NULL(<span class="number">0</span>),</span><br><span class="line">    OTHER(<span class="number">1111</span>),</span><br><span class="line">    BLOB(<span class="number">2004</span>),</span><br><span class="line">    CLOB(<span class="number">2005</span>),</span><br><span class="line">    BOOLEAN(<span class="number">16</span>),</span><br><span class="line">    CURSOR(-<span class="number">10</span>),</span><br><span class="line">    UNDEFINED(-<span class="number">2147482648</span>),</span><br><span class="line">    NVARCHAR(-<span class="number">9</span>),</span><br><span class="line">    NCHAR(-<span class="number">15</span>),</span><br><span class="line">    NCLOB(<span class="number">2011</span>),</span><br><span class="line">    STRUCT(<span class="number">2002</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> TYPE_CODE;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Map&lt;Integer, JdbcType&gt; codeLookup = <span class="keyword">new</span> HashMap();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">JdbcType</span><span class="params">(<span class="keyword">int</span> code)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.TYPE_CODE = code;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> JdbcType <span class="title">forCode</span><span class="params">(<span class="keyword">int</span> code)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (JdbcType)codeLookup.get(code);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        JdbcType[] arr$ = values();</span><br><span class="line">        <span class="keyword">int</span> len$ = arr$.length;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i$ = <span class="number">0</span>; i$ &lt; len$; ++i$) &#123;</span><br><span class="line">            JdbcType type = arr$[i$];</span><br><span class="line">            codeLookup.put(type.TYPE_CODE, type);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+      
+    
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://xulongcheng.github.io/2018/09/20/GitHub项目收藏/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -640,181 +815,6 @@
 <li>简介：<br>Arthas 是Alibaba开源的Java诊断工具，深受开发者喜爱。<br>当你遇到以下类似问题而束手无策时，Arthas可以帮助你解决：<br>这个类从哪个 jar 包加载的？为什么会报各种类相关的 Exception？<br>我改的代码为什么没有执行到？难道是我没 commit？分支搞错了？<br>遇到问题无法在线上 debug，难道只能通过加日志再重新发布吗？<br>线上遇到某个用户的数据处理有问题，但线上同样无法 debug，线下无法重现！<br>是否有一个全局视角来查看系统的运行状况？<br>有什么办法可以监控到JVM的实时运行状态？<br>Arthas采用命令行交互模式，同时提供丰富的 Tab 自动补全功能，进一步方便进行问题的定位和诊断。 </li>
 </ul>
 
-          
-        
-      
-    </div>
-
-    
-
-    
-    
-    
-
-    
-
-    
-      
-    
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://xulongcheng.github.io/2018/09/20/ibatis支持JdbcType类型/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Lucien">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="龙城">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                
-                <a href="/2018/09/20/ibatis支持JdbcType类型/" class="post-title-link" itemprop="url">ibatis支持JdbcType类型</a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-
-            
-            
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-
-              
-                
-              
-
-              <time title="Created: 2018-09-20 00:00:00" itemprop="dateCreated datePublished" datetime="2018-09-20T00:00:00+08:00">2018-09-20</time>
-            
-
-            
-              
-
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Edited on</span>
-                
-                <time title="Modified: 2019-01-22 17:37:17" itemprop="dateModified" datetime="2019-01-22T17:37:17+08:00">2019-01-22</time>
-              
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/学习笔记/" itemprop="url" rel="index"><span itemprop="name">学习笔记</span></a></span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>直接看JdbcType类</p>
-</blockquote>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// Source code recreated from a .class file by IntelliJ IDEA</span></span><br><span class="line"><span class="comment">// (powered by Fernflower decompiler)</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">package</span> org.apache.ibatis.type;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> JdbcType &#123;</span><br><span class="line">    ARRAY(<span class="number">2003</span>),</span><br><span class="line">    BIT(-<span class="number">7</span>),</span><br><span class="line">    TINYINT(-<span class="number">6</span>),</span><br><span class="line">    SMALLINT(<span class="number">5</span>),</span><br><span class="line">    INTEGER(<span class="number">4</span>),</span><br><span class="line">    BIGINT(-<span class="number">5</span>),</span><br><span class="line">    FLOAT(<span class="number">6</span>),</span><br><span class="line">    REAL(<span class="number">7</span>),</span><br><span class="line">    DOUBLE(<span class="number">8</span>),</span><br><span class="line">    NUMERIC(<span class="number">2</span>),</span><br><span class="line">    DECIMAL(<span class="number">3</span>),</span><br><span class="line">    CHAR(<span class="number">1</span>),</span><br><span class="line">    VARCHAR(<span class="number">12</span>),</span><br><span class="line">    LONGVARCHAR(-<span class="number">1</span>),</span><br><span class="line">    DATE(<span class="number">91</span>),</span><br><span class="line">    TIME(<span class="number">92</span>),</span><br><span class="line">    TIMESTAMP(<span class="number">93</span>),</span><br><span class="line">    BINARY(-<span class="number">2</span>),</span><br><span class="line">    VARBINARY(-<span class="number">3</span>),</span><br><span class="line">    LONGVARBINARY(-<span class="number">4</span>),</span><br><span class="line">    NULL(<span class="number">0</span>),</span><br><span class="line">    OTHER(<span class="number">1111</span>),</span><br><span class="line">    BLOB(<span class="number">2004</span>),</span><br><span class="line">    CLOB(<span class="number">2005</span>),</span><br><span class="line">    BOOLEAN(<span class="number">16</span>),</span><br><span class="line">    CURSOR(-<span class="number">10</span>),</span><br><span class="line">    UNDEFINED(-<span class="number">2147482648</span>),</span><br><span class="line">    NVARCHAR(-<span class="number">9</span>),</span><br><span class="line">    NCHAR(-<span class="number">15</span>),</span><br><span class="line">    NCLOB(<span class="number">2011</span>),</span><br><span class="line">    STRUCT(<span class="number">2002</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> TYPE_CODE;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Map&lt;Integer, JdbcType&gt; codeLookup = <span class="keyword">new</span> HashMap();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">JdbcType</span><span class="params">(<span class="keyword">int</span> code)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.TYPE_CODE = code;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> JdbcType <span class="title">forCode</span><span class="params">(<span class="keyword">int</span> code)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> (JdbcType)codeLookup.get(code);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        JdbcType[] arr$ = values();</span><br><span class="line">        <span class="keyword">int</span> len$ = arr$.length;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i$ = <span class="number">0</span>; i$ &lt; len$; ++i$) &#123;</span><br><span class="line">            JdbcType type = arr$[i$];</span><br><span class="line">            codeLookup.put(type.TYPE_CODE, type);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
           
         
       
